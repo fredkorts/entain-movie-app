@@ -29,7 +29,13 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   res.status(status).json({ error: { message, status } });
 });
 
-const port = Number(process.env.PORT) || 3001;
-app.listen(port, () => {
-  console.log(`Backend listening on http://localhost:${port}`);
-});
+// Export for Vercel serverless
+export default app;
+
+// Local dev server
+if (!process.env.VERCEL) {
+  const port = Number(process.env.PORT) || 3001;
+  app.listen(port, () => {
+    console.log(`Backend listening on http://localhost:${port}`);
+  });
+}

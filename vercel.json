@@ -1,11 +1,5 @@
 {
   "buildCommand": "pnpm build",
   "outputDirectory": "frontend/dist",
-  "devCommand": "pnpm dev",
-  "functions": {
-    "backend/src/index.ts": { "runtime": "@vercel/node" }
-  },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/backend/src/index.ts" }
-  ]
+  "devCommand": "pnpm dev"
 }
