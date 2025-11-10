@@ -2,14 +2,15 @@
 const app = require('../backend/dist/index.js').default;
 
 module.exports = (req, res) => {
-  // Turn "/api/anything/here?x=1" into "/anything/here?x=1"
   const url = new URL(req.url, 'http://localhost');
-  url.searchParams.delete('...all'); // clean up if present
-  const normalizedPath = url.pathname.replace(/^\/api(\/|$)/, '/'); // always strip "/api"
-  req.url = normalizedPath + url.search;
-
-  // (Optional) quick debug to verify normalization in Vercel logs
-  // console.log('Normalized to', req.url);
-
+  // If it's /api/movies (list), rewrite to /movies; let [id].js handle /api/movies/:id
+  if (/^\/api\/movies(\/)?$/.test(url.pathname)) {
+    req.url = '/movies' + url.search;
+  } else if (/^\/api\/health(\/)?$/.test(url.pathname)) {
+    req.url = '/health' + url.search;
+  } else {
+    // Fallback: strip leading /api if present
+    req.url = url.pathname.replace(/^\/api(\/|$)/, '/') + url.search;
+  }
   return app(req, res);
 };
