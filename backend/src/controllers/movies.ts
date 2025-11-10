@@ -1,22 +1,27 @@
-import { Request, Response, NextFunction } from "express";
+import type { RequestHandler } from "express";
 import { fetchMovies, fetchMovieById } from "../services/tmdb";
 
-export async function listMovies(req: Request, res: Response, next: NextFunction) {
+export const listMovies: RequestHandler = async (req, res, next) => {
   try {
-    const page = Number(req.query.page ?? 1);
-    const search = String(req.query.search ?? "");
-    const lang = String(req.query.lang ?? "en");
+    const q = req.query as Record<string, unknown>;
+    const page = Number(q.page ?? 1);
+    const search = String(q.search ?? "");
+    const lang = String(q.lang ?? "en");
     const data = await fetchMovies({ page, search, lang });
     res.json(data);
-  } catch (err) { next(err); }
-}
+  } catch (err) {
+    next(err as any);
+  }
+};
 
-export async function getMovie(req: Request, res: Response, next: NextFunction) {
+export const getMovie: RequestHandler = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const lang = String(req.query.lang ?? "en");
+    const { id } = (req.params as Record<string, string>);
+    const q = req.query as Record<string, unknown>;
+    const lang = String(q.lang ?? "en");
     const data = await fetchMovieById(id, lang);
     res.json(data);
-  } catch (err) { next(err); }
-}
-
+  } catch (err) {
+    next(err as any);
+  }
+};
