@@ -1,5 +1,3 @@
-// Load the COMPILED Express app (CommonJS), not the TS source
+// CommonJS serverless function that loads compiled Express app
 const app = require('../backend/dist/index.js').default;
-
-// Export for Vercel Serverless (CommonJS)
 module.exports = app;
