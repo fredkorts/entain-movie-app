@@ -1,5 +1,5 @@
 import { getJSON } from "../../../lib/api";
-import type { MoviesResponse, MovieSummary } from "./types";
+import type { MovieDetail, MoviesResponse, MovieSummary } from "./types";
 
 export async function fetchMovies(params: { page?: number; search?: string }): Promise<MoviesResponse> {
   const page = params.page ?? 1;
@@ -12,4 +12,8 @@ export async function fetchMovies(params: { page?: number; search?: string }): P
 
 export async function fetchMovieById(id: number | string): Promise<MovieSummary & Record<string, unknown>> {
   return getJSON(`/movies/${id}`);
+}
+
+export async function fetchMovieDetail(id: number | string): Promise<MovieDetail> {
+  return getJSON<MovieDetail>(`/movies/${id}`);
 }
