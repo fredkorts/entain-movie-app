@@ -12,8 +12,8 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Health on both paths (for Vercel function path behavior)
-app.get(['/api/health', '/health'], (_req, res) => {
+// Health on both paths (covers Vercel's /api/* and stripped path)
+app.get(['/api/health', '/health'], (_req: Request, res: Response) => {
   res.json({ ok: true, service: 'backend', timestamp: new Date().toISOString() });
 });
 
@@ -29,7 +29,7 @@ app.use((_req: Request, res: Response) => {
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   const status = err?.status || 500;
   const message = status === 500 ? 'Internal server error' : err.message;
-  if (err?.retryAfter) res.setHeader('Retry-After', String(err.retryAfter));
+  if (err?.retryAfter) res.set('Retry-After', String(err.retryAfter)); // <-- use res.set, not setHeader
   res.status(status).json({ error: { message, status } });
 });
 
