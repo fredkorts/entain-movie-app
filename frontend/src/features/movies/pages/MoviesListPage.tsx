@@ -1,32 +1,39 @@
-import { useMemo, useState } from "react";
-import { Input, Pagination, Space } from "antd";
-import MovieCard, { type MovieSummary } from "../components/MovieCard";
+import { useEffect, useMemo, useState } from "react";
+import { Alert, Input, Pagination, Skeleton, Space } from "antd";
+import MovieCard from "../components/MovieCard";
+import type { MoviesResponse } from "../api/types";
+import { fetchMovies } from "../api/moviesApi";
 import styles from "./MoviesListPage.module.scss";
-
-// Simple mock dataset (we'll replace with API next step)
-const MOCK: MovieSummary[] = Array.from({ length: 87 }, (_, i) => ({
-  id: i + 1,
-  title: `Sample Movie #${i + 1}`,
-  release_date: `20${String(10 + (i % 15)).padStart(2, "0")}-01-01`,
-  vote_average: Math.round(((i % 10) + 1) * 10) / 10,
-}));
+import { useDebounce } from "../../../shared/hooks/useDebounce";
 
 const PAGE_SIZE = 12;
 
 export default function MoviesListPage() {
-  const [page, setPage] = useState(1);
   const [q, setQ] = useState("");
+  const [page, setPage] = useState(1);
 
-  const filtered = useMemo(() => {
-    if (!q.trim()) return MOCK;
-    const s = q.trim().toLowerCase();
-    return MOCK.filter(m => m.title.toLowerCase().includes(s));
-  }, [q]);
+  const debouncedQ = useDebounce(q, 350);
 
-  const total = filtered.length;
-  const current = Math.min(page, Math.max(1, Math.ceil(total / PAGE_SIZE) || 1));
-  const start = (current - 1) * PAGE_SIZE;
-  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+  const [data, setData] = useState<MoviesResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isActive = true;
+    setLoading(true);
+    setErr(null);
+    fetchMovies({ page, search: debouncedQ })
+      .then((d) => { if (isActive) setData(d); })
+      .catch((e) => { if (isActive) setErr(e.message || "Failed to load"); })
+      .finally(() => { if (isActive) setLoading(false); });
+    return () => { isActive = false; };
+  }, [page, debouncedQ]);
+
+  const items = data?.results ?? [];
+  const total = data?.total_results ?? 0;
+
+  // AntD Pagination uses total items; backend already returns total_results
+  const skeletons = useMemo(() => Array.from({ length: PAGE_SIZE }), []);
 
   return (
     <main className={styles.wrap}>
@@ -39,19 +46,30 @@ export default function MoviesListPage() {
         />
       </Space>
 
+      {err && <Alert type="error" message="Error loading movies" description={err} showIcon />}
+
       <section className={styles.grid} aria-live="polite">
-        {pageItems.map(m => (
+        {loading &&
+          skeletons.map((_, i) => (
+            <div key={i} className={styles.card}><Skeleton active /></div>
+          ))
+        }
+
+        {!loading && items.map((m) => (
           <div key={m.id} className={styles.card}>
             <MovieCard movie={m} />
           </div>
         ))}
-        {pageItems.length === 0 && <p>No results found</p>}
+
+        {!loading && !err && items.length === 0 && (
+          <p>No results found</p>
+        )}
       </section>
 
-      {total > PAGE_SIZE && (
+      {!loading && total > PAGE_SIZE && (
         <div className={styles.pagination}>
           <Pagination
-            current={current}
+            current={data?.page ?? page}
             pageSize={PAGE_SIZE}
             total={total}
             onChange={setPage}
