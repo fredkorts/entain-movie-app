@@ -12,11 +12,11 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.get('/api/health', (_req, res) => {
+app.get(['/api/health', '/health'], (_req, res) => {
   res.json({ ok: true, service: 'backend', timestamp: new Date().toISOString() });
 });
 
-app.use('/api/movies', moviesRouter);
+app.use(['/api/movies', '/movies'], moviesRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ error: { message: 'Not found', status: 404 } });
