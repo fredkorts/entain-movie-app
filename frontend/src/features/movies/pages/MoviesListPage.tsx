@@ -5,12 +5,14 @@ import type { MoviesResponse } from "../api/types";
 import { fetchMovies } from "../api/moviesApi";
 import styles from "./MoviesListPage.module.scss";
 import { useDebounce } from "../../../shared/hooks/useDebounce";
+import { useTranslation } from "react-i18next";
 
 const PAGE_SIZE = 12;
 
 export default function MoviesListPage() {
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
+  const { t, i18n } = useTranslation();
 
   const debouncedQ = useDebounce(q, 350);
 
@@ -27,7 +29,7 @@ export default function MoviesListPage() {
       .catch((e) => { if (isActive) setErr(e.message || "Failed to load"); })
       .finally(() => { if (isActive) setLoading(false); });
     return () => { isActive = false; };
-  }, [page, debouncedQ]);
+  }, [page, debouncedQ, i18n.language]);
 
   const items = data?.results ?? [];
   const total = data?.total_results ?? 0;
@@ -39,7 +41,7 @@ export default function MoviesListPage() {
     <main className={styles.wrap}>
       <Space direction="vertical" size="large" className={styles.toolbar}>
         <Input.Search
-          placeholder="Search movies"
+          placeholder={t("search_placeholder")}
           allowClear
           value={q}
           onChange={(e) => { setPage(1); setQ(e.target.value); }}
@@ -62,7 +64,7 @@ export default function MoviesListPage() {
         ))}
 
         {!loading && !err && items.length === 0 && (
-          <p>No results found</p>
+          <p>{t("no_results")}</p>
         )}
       </section>
 

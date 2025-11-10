@@ -1,0 +1,14 @@
+{
+  "app_title": "Movie Search",
+  "search_placeholder": "Search movies",
+  "no_results": "No results found",
+  "back": "Back",
+  "release": "Release",
+  "runtime": "Runtime",
+  "rating": "Rating",
+  "no_overview": "No overview available.",
+  "movie_not_found": "Movie not found",
+  "failed_to_load": "Failed to load movie",
+  "error": "Error",
+  "minutes": "min"
+}

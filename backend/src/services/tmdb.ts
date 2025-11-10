@@ -5,6 +5,16 @@ const TMDB = axios.create({
   timeout: 10_000
 });
 
+function mapLanguage(lang?: string): string {
+  const l = (lang || "en").split("-")[0].toLowerCase();
+  // Map known languages to TMDB BCP-47 tags
+  if (l === "ru") return "ru-RU";
+  if (l === "en") return "en-US";
+  // TMDB doesn't really have Estonian; fall back to English
+  return "en-US";
+}
+
+
 function authParams() {
   const apiKey = process.env.TMDB_API_KEY;
   if (!apiKey) {
@@ -16,11 +26,12 @@ function authParams() {
   return { api_key: apiKey };
 }
 
-export async function fetchMovies(opts: { page?: number; search?: string }) {
+export async function fetchMovies(opts: { page?: number; search?: string; lang?: string }) {
   const page = opts.page ?? 1;
   const search = (opts.search ?? "").trim();
+  const language = mapLanguage(opts.lang);
 
-  const params: Record<string, string | number> = { ...authParams(), page };
+  const params: Record<string, string | number> = { ...authParams(), page, language };
 
   let path = "/discover/movie";
   if (search) {
@@ -45,8 +56,9 @@ export async function fetchMovies(opts: { page?: number; search?: string }) {
   };
 }
 
-export async function fetchMovieById(id: string) {
-  const { data } = await TMDB.get(`/movie/${id}`, { params: authParams() });
+export async function fetchMovieById(id: string, lang?: string) {
+  const language = mapLanguage(lang);
+  const { data } = await TMDB.get(`/movie/${id}`, { params: { ...authParams(), language } });
   return {
     id: data.id,
     title: data.title,

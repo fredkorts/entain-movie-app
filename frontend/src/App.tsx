@@ -1,21 +1,17 @@
-import { useEffect, useState } from 'react';
+import { RouterProvider } from "react-router-dom";
+import router from "./router";
+import { ConfigProvider, theme as antdTheme } from "antd";
+import { ThemeContext, useThemeInit } from "./theme/ThemeContext";
 
-function App() {
-  const [health, setHealth] = useState<string>('checking…');
-
-  useEffect(() => {
-    fetch(import.meta.env.VITE_API_BASE_URL + '/health')
-      .then(r => r.json())
-      .then(d => setHealth(d.ok ? 'ok' : 'not ok'))
-      .catch(() => setHealth('error'));
-  }, []);
+export default function App() {
+  const themeCtx = useThemeInit();
+  const algorithm = themeCtx.mode === "dark" ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm;
 
   return (
-    <div style={{ fontFamily: 'system-ui', padding: 16 }}>
-      <h1>Hello Movies</h1>
-      <p>Backend health: {health}</p>
-    </div>
+    <ThemeContext.Provider value={themeCtx}>
+      <ConfigProvider theme={{ algorithm }}>
+        <RouterProvider router={router} />
+      </ConfigProvider>
+    </ThemeContext.Provider>
   );
 }
-
-export default App;

@@ -1,0 +1,14 @@
+{
+  "app_title": "Filmiotsing",
+  "search_placeholder": "Otsi filme",
+  "no_results": "Tulemusi ei leitud",
+  "back": "Tagasi",
+  "release": "Väljalase",
+  "runtime": "Kestus",
+  "rating": "Hinnang",
+  "no_overview": "Ülevaade pole saadaval.",
+  "movie_not_found": "Filmi ei leitud",
+  "failed_to_load": "Filmi laadimine ebaõnnestus",
+  "error": "Viga",
+  "minutes": "min"
+}

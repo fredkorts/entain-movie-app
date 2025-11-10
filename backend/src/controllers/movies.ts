@@ -5,19 +5,18 @@ export async function listMovies(req: Request, res: Response, next: NextFunction
   try {
     const page = Number(req.query.page ?? 1);
     const search = String(req.query.search ?? "");
-    const data = await fetchMovies({ page, search });
+    const lang = String(req.query.lang ?? "en");
+    const data = await fetchMovies({ page, search, lang });
     res.json(data);
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 }
 
 export async function getMovie(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = req.params;
-    const data = await fetchMovieById(id);
+    const lang = String(req.query.lang ?? "en");
+    const data = await fetchMovieById(id, lang);
     res.json(data);
-  } catch (err) {
-    next(err);
-  }
+  } catch (err) { next(err); }
 }
+

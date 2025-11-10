@@ -1,0 +1,14 @@
+{
+  "app_title": "Поиск фильмов",
+  "search_placeholder": "Искать фильмы",
+  "no_results": "Ничего не найдено",
+  "back": "Назад",
+  "release": "Выпуск",
+  "runtime": "Длительность",
+  "rating": "Рейтинг",
+  "no_overview": "Описание недоступно.",
+  "movie_not_found": "Фильм не найден",
+  "failed_to_load": "Не удалось загрузить фильм",
+  "error": "Ошибка",
+  "minutes": "мин"
+}
