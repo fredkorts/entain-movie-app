@@ -16,10 +16,10 @@ app.use(morgan('dev'));
 const healthHandler: RequestHandler = (_req, res) => {
   res.json({ ok: true, service: 'backend', timestamp: new Date().toISOString() });
 };
-app.get('/api/health', healthHandler);
+app.get(['/api/health', '/health'], healthHandler);
 
 // Movies – mounted under /api/* (Vercel only invokes /api/*)
-app.use('/api/movies', moviesRouter);
+app.use(['/api/movies', '/movies'], moviesRouter);
 
 // 404 – explicitly typed
 const notFound: RequestHandler = (_req, res) => {
