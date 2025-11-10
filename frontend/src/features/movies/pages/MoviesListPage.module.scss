@@ -1,0 +1,20 @@
+.wrap {
+  display: grid;
+  gap: 16px;
+}
+.toolbar {
+  margin-bottom: 8px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.card {
+  display: block;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
