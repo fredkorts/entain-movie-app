@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { type Request, type Response, type NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -12,30 +12,31 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Health on both paths (for Vercel function path behavior)
 app.get(['/api/health', '/health'], (_req, res) => {
   res.json({ ok: true, service: 'backend', timestamp: new Date().toISOString() });
 });
 
+// Movies on both paths
 app.use(['/api/movies', '/movies'], moviesRouter);
 
-app.use((_req, res) => {
+// 404 fallback
+app.use((_req: Request, res: Response) => {
   res.status(404).json({ error: { message: 'Not found', status: 404 } });
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  const status = err.status || 500;
+// Error handler
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  const status = err?.status || 500;
   const message = status === 500 ? 'Internal server error' : err.message;
+  if (err?.retryAfter) res.setHeader('Retry-After', String(err.retryAfter));
   res.status(status).json({ error: { message, status } });
 });
 
-// Export for Vercel serverless
 export default app;
 
-// Local dev server
+// Local dev only
 if (!process.env.VERCEL) {
   const port = Number(process.env.PORT) || 3001;
-  app.listen(port, () => {
-    console.log(`Backend listening on http://localhost:${port}`);
-  });
+  app.listen(port, () => console.log(`Backend listening on http://localhost:${port}`));
 }
