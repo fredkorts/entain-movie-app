@@ -1,5 +1,5 @@
 // api/movies/[id].js
-const app = require('../../../backend/dist/index.js').default;
+const app = require('../../backend/dist/index.js').default;
 
 module.exports = (req, res) => {
   // Extract the id from the path: /api/movies/:id
