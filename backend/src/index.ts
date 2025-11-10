@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { type Request, type Response, type NextFunction } from 'express';
+import express, { type RequestHandler, type ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -12,26 +12,29 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Health on both paths (covers Vercel's /api/* and stripped path)
-app.get(['/api/health', '/health'], (_req: Request, res: Response) => {
+// Health: both /api/health and /health (covers Vercel’s path behavior)
+const healthHandler: RequestHandler = (_req, res) => {
   res.json({ ok: true, service: 'backend', timestamp: new Date().toISOString() });
-});
+};
+app.get(['/api/health', '/health'], healthHandler);
 
 // Movies on both paths
 app.use(['/api/movies', '/movies'], moviesRouter);
 
 // 404 fallback
-app.use((_req: Request, res: Response) => {
+const notFound: RequestHandler = (_req, res) => {
   res.status(404).json({ error: { message: 'Not found', status: 404 } });
-});
+};
+app.use(notFound);
 
 // Error handler
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  const status = err?.status || 500;
-  const message = status === 500 ? 'Internal server error' : err.message;
-  if (err?.retryAfter) res.set('Retry-After', String(err.retryAfter)); // <-- use res.set, not setHeader
+const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  const status = (err && (err as any).status) || 500;
+  const message = status === 500 ? 'Internal server error' : (err && err.message) || 'Error';
+  if ((err as any)?.retryAfter) res.set('Retry-After', String((err as any).retryAfter));
   res.status(status).json({ error: { message, status } });
-});
+};
+app.use(errorHandler);
 
 export default app;
 
