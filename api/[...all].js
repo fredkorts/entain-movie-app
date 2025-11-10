@@ -2,14 +2,14 @@
 const app = require('../backend/dist/index.js').default;
 
 module.exports = (req, res) => {
-  // Vercel puts everything after /api/ into req.query['...all']
-  const rest = req.query['...all'];
-  if (rest) {
-    const segments = Array.isArray(rest) ? rest.join('/') : rest; // e.g. "movies/1025527"
-    // Preserve the original query string (minus the ...all param)
-    const url = new URL(req.url, 'http://localhost');
-    url.searchParams.delete('...all');
-    req.url = `/${segments}${url.search}`; // becomes "/movies/1025527?lang=ru"
-  }
+  // Turn "/api/anything/here?x=1" into "/anything/here?x=1"
+  const url = new URL(req.url, 'http://localhost');
+  url.searchParams.delete('...all'); // clean up if present
+  const normalizedPath = url.pathname.replace(/^\/api(\/|$)/, '/'); // always strip "/api"
+  req.url = normalizedPath + url.search;
+
+  // (Optional) quick debug to verify normalization in Vercel logs
+  // console.log('Normalized to', req.url);
+
   return app(req, res);
 };
