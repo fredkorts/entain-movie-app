@@ -1,12 +1,14 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Alert, Input, Pagination, Skeleton, Space } from "antd";
 import MovieCard from "../components/MovieCard";
 import styles from "./MoviesListPage.module.scss";
 import { useDebounce } from "../../../shared/hooks/useDebounce";
 import { useTranslation } from "react-i18next";
+import { getErrorMessage } from "../../../lib/errorUtils";
 import { useGetMoviesQuery } from "../../../store/api/moviesApi";
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10; // Custom page size for better UX
+const SKELETONS = Array.from({ length: PAGE_SIZE });
 
 export default function MoviesListPage() {
   const [q, setQ] = useState("");
@@ -24,9 +26,6 @@ export default function MoviesListPage() {
   const items = data?.results ?? [];
   const total = data?.total_results ?? 0;
 
-  // AntD Pagination uses total items; backend already returns total_results
-  const skeletons = useMemo(() => Array.from({ length: PAGE_SIZE }), []);
-
   return (
     <main className={styles.wrap}>
       <Space direction="vertical" size="large" className={styles.toolbar}>
@@ -41,15 +40,15 @@ export default function MoviesListPage() {
       {error && (
         <Alert 
           type="error" 
-          message="Error loading movies" 
-          description={typeof error === 'string' ? error : 'Failed to load movies'} 
+          message={t("error")} 
+          description={getErrorMessage(error, t("failed_to_load"))} 
           showIcon 
         />
       )}
 
       <section className={styles.grid} aria-live="polite">
         {isLoading &&
-          skeletons.map((_, i) => (
+          SKELETONS.map((_, i) => (
             <div key={i} className={styles.card}><Skeleton active /></div>
           ))
         }

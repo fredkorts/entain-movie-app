@@ -2,7 +2,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Alert, Button, Card, Col, Row, Skeleton, Space, Tag, Typography, Avatar, List, Rate } from "antd";
 import { PlayCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { useState, useCallback, useEffect } from "react";
 import { formatDate } from "../../../lib/format";
+import { getErrorMessage } from "../../../lib/errorUtils";
 import { translateJobTitle } from "../../../lib/jobTitleTranslations";
 import { useGetMovieDetailQuery } from "../../../store/api/moviesApi";
 import type { CastMember, CrewMember, Video, Review } from "../api/types";
@@ -13,33 +15,33 @@ const IMG = (p: string | null, w = 500) => (p ? `https://image.tmdb.org/t/p/w${w
 
 const CastSection = ({ cast }: { cast: CastMember[] }) => {
   const { t } = useTranslation();
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
   
-  const renderCastImage = (member: CastMember) => {
-    if (member.profile_path) {
+  // Reset failed images when cast changes (e.g., language switch or different movie)
+  useEffect(() => {
+    setFailedImages(new Set());
+  }, [cast]);
+  
+  const handleImageError = useCallback((memberId: number) => {
+    setFailedImages(prev => new Set(prev).add(memberId));
+  }, []);
+  
+  const renderCastImage = useCallback((member: CastMember) => {
+    const hasImageFailed = failedImages.has(member.id);
+    const hasProfilePath = member.profile_path && !hasImageFailed;
+    
+    if (hasProfilePath) {
       return (
         <img
           alt={member.name}
           src={IMG(member.profile_path, 300)}
           style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          onError={(e) => {
-            // Replace broken image with fallback avatar
-            const target = e.currentTarget;
-            const container = target.parentElement;
-            if (container) {
-              container.innerHTML = `
-                <div style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; background-color: #fafafa;">
-                  <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #d9d9d9; display: flex; align-items: center; justify-content: center; color: #8c8c8c; font-size: 32px;">
-                    👤
-                  </div>
-                </div>
-              `;
-            }
-          }}
+          onError={() => handleImageError(member.id)}
         />
       );
     }
     
-    // No profile image available - show fallback avatar
+    // No profile image available or image failed to load - show fallback avatar
     return (
       <div style={{
         display: "flex",
@@ -56,7 +58,7 @@ const CastSection = ({ cast }: { cast: CastMember[] }) => {
         />
       </div>
     );
-  };
+  }, [failedImages, handleImageError]);
   
   return (
     <>
@@ -218,7 +220,7 @@ export default function MovieDetailPage() {
     <Alert 
       type="error" 
       message={t("error")} 
-      description={typeof error === 'string' ? error : t("failed_to_load")} 
+      description={getErrorMessage(error, t("failed_to_load"))} 
       showIcon 
     />
   );

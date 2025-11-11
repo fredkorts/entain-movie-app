@@ -2,6 +2,15 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { MovieDetail, MoviesResponse } from '../../features/movies/api/types';
 import i18n from '../../i18n';
 
+// Validate API base URL at module startup
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+if (!API_BASE_URL) {
+  throw new Error(
+    'VITE_API_BASE_URL environment variable is required. ' +
+    'Please check your .env file or environment configuration.'
+  );
+}
+
 function shortLang() {
   return (i18n.language || "en").split("-")[0];
 }
@@ -9,7 +18,7 @@ function shortLang() {
 export const moviesApi = createApi({
   reducerPath: 'moviesApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_API_BASE_URL as string,
+    baseUrl: API_BASE_URL,
   }),
   tagTypes: ['Movie', 'MovieList'],
   endpoints: (builder) => ({

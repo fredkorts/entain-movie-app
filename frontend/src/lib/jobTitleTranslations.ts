@@ -1,5 +1,26 @@
+// TypeScript types for job title translations
+export type JobTitle = 
+  | "Director"
+  | "Producer"
+  | "Executive Producer"
+  | "Screenplay"
+  | "Story"
+  | "Writer"
+  | "Original Music Composer"
+  | "Director of Photography"
+  | "Editor"
+  | "Production Designer"
+  | "Costume Design"
+  | "Makeup Artist"
+  | "Sound Designer"
+  | "Visual Effects Supervisor";
+
+export type SupportedLanguage = 'en' | 'ru' | 'et';
+
+export type TranslationMap = Record<JobTitle, string>;
+
 // Job title translations
-export const jobTitleTranslations = {
+export const jobTitleTranslations: Record<SupportedLanguage, TranslationMap> = {
   en: {
     "Director": "Director",
     "Producer": "Producer",
@@ -51,7 +72,23 @@ export const jobTitleTranslations = {
 };
 
 export function translateJobTitle(job: string, language: string): string {
-  const lang = language.split('-')[0]; // 'en-US' -> 'en'
-  const translations = jobTitleTranslations[lang as keyof typeof jobTitleTranslations];
-  return translations?.[job as keyof typeof translations] || job;
+  // Extract base language code and normalize case
+  const baseLang = language.split('-')[0].toLowerCase();
+  
+  // Defensive check: verify language exists in our translations
+  if (!(baseLang in jobTitleTranslations)) {
+    return job; // Return original if language not supported
+  }
+  
+  // Type-safe access now that we've verified the language exists
+  const lang = baseLang as SupportedLanguage;
+  const translations = jobTitleTranslations[lang];
+  
+  // Defensive check: verify job title exists in the translations
+  if (!(job in translations)) {
+    return job; // Return original if job title not found
+  }
+  
+  // Type-safe access now that we've verified both language and job exist
+  return translations[job as JobTitle];
 }
