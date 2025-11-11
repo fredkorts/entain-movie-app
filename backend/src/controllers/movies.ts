@@ -1,8 +1,49 @@
 import type { RequestHandler } from 'express';
 import { fetchMovies} from '../services/tmdb';
 
+interface TMDBCastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  order: number;
+}
+
+interface TMDBCrewMember {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+}
+
+interface TMDBVideo {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+  official: boolean;
+}
+
+interface TMDBReview {
+  id: string;
+  author: string;
+  content: string;
+  created_at: string;
+  url: string;
+}
+
+// Constants for slice limits
+const MAX_BACKDROPS = 12;
+const MAX_POSTERS = 8;
+const MAX_REVIEWS = 5;
+
 const TMDB = 'https://api.themoviedb.org/3';
-const API_KEY = process.env.TMDB_API_KEY!;
+const API_KEY = process.env.TMDB_API_KEY;
+if (!API_KEY) {
+  throw new Error('TMDB_API_KEY environment variable is required');
+}
 
 const langParam = (lang?: string) =>
   new URLSearchParams({
@@ -30,10 +71,23 @@ export const getMovie: RequestHandler = async (req, res, next) => {
     const { id } = req.params;
     const { lang } = req.query as { lang?: string };
 
-    const qs = langParam(lang);
-    qs.append('append_to_response', 'credits,images,videos,reviews');
-
-    const r = await fetch(`${TMDB}/movie/${id}?${qs.toString()}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+    
+    const r = await fetch(`${TMDB}/movie/${id}?${langParam(lang).toString()}`, {
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    
+    if (!r.ok) {
+      const errorData = await r.json().catch(() => ({}));
+      return res.status(r.status).json({ 
+        error: { 
+          status: r.status, 
+          message: errorData.status_message || 'TMDB error' 
+        } 
+      });
+    }
     if (!r.ok) {
       return res.status(r.status).json({ error: { status: r.status, message: 'TMDB error' } });
     }
@@ -58,21 +112,21 @@ export const getMovie: RequestHandler = async (req, res, next) => {
         'status',
         'tagline',
       ]),
-      cast: (data.credits?.cast || []).map((c: any) => ({
+      cast: (data.credits?.cast || []).map((c: TMDBCastMember) => ({
         id: c.id,
         name: c.name,
         character: c.character,
         profile_path: c.profile_path,
         order: c.order,
       })),
-      crew: (data.credits?.crew || []).map((c: any) => ({
+      crew: (data.credits?.crew || []).map((c: TMDBCrewMember) => ({
         id: c.id,
         name: c.name,
         job: c.job,
         department: c.department,
         profile_path: c.profile_path,
       })),
-      videos: (data.videos?.results || []).map((v: any) => ({
+      videos: (data.videos?.results || []).map((v: TMDBVideo) => ({
         id: v.id,
         key: v.key,
         name: v.name,
@@ -81,10 +135,10 @@ export const getMovie: RequestHandler = async (req, res, next) => {
         official: v.official,
       })),
       images: {
-        backdrops: (data.images?.backdrops || []).slice(0, 12),
-        posters: (data.images?.posters || []).slice(0, 8),
+        backdrops: (data.images?.backdrops || []).slice(0, MAX_BACKDROPS),
+        posters: (data.images?.posters || []).slice(0, MAX_POSTERS),
       },
-      reviews: (data.reviews?.results || []).slice(0, 5).map((r: any) => ({
+      reviews: (data.reviews?.results || []).slice(0, MAX_REVIEWS).map((r: TMDBReview) => ({
         id: r.id,
         author: r.author,
         content: r.content,
