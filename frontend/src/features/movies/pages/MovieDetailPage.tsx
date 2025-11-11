@@ -3,7 +3,8 @@ import { Alert, Button, Card, Col, Row, Skeleton, Space, Tag, Typography, Avatar
 import { PlayCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../../lib/format";
-import { useMovieDetail } from "../hooks/useMovieDetail";
+import { translateJobTitle } from "../../../lib/jobTitleTranslations";
+import { useGetMovieDetailQuery } from "../../../store/api/moviesApi";
 import type { CastMember, CrewMember, Video, Review } from "../api/types";
 
 const { Title, Text, Paragraph } = Typography;
@@ -12,6 +13,50 @@ const IMG = (p: string | null, w = 500) => (p ? `https://image.tmdb.org/t/p/w${w
 
 const CastSection = ({ cast }: { cast: CastMember[] }) => {
   const { t } = useTranslation();
+  
+  const renderCastImage = (member: CastMember) => {
+    if (member.profile_path) {
+      return (
+        <img
+          alt={member.name}
+          src={IMG(member.profile_path, 300)}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          onError={(e) => {
+            // Replace broken image with fallback avatar
+            const target = e.currentTarget;
+            const container = target.parentElement;
+            if (container) {
+              container.innerHTML = `
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; background-color: #fafafa;">
+                  <div style="width: 80px; height: 80px; border-radius: 50%; background-color: #d9d9d9; display: flex; align-items: center; justify-content: center; color: #8c8c8c; font-size: 32px;">
+                    👤
+                  </div>
+                </div>
+              `;
+            }
+          }}
+        />
+      );
+    }
+    
+    // No profile image available - show fallback avatar
+    return (
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100%",
+        width: "100%",
+        backgroundColor: "#fafafa"
+      }}>
+        <Avatar 
+          size={80} 
+          icon={<UserOutlined />}
+          style={{ backgroundColor: "#d9d9d9" }}
+        />
+      </div>
+    );
+  };
   
   return (
     <>
@@ -22,12 +67,15 @@ const CastSection = ({ cast }: { cast: CastMember[] }) => {
             <Card
               hoverable
               cover={
-                <div style={{ height: 200, overflow: "hidden" }}>
-                  <img
-                    alt={member.name}
-                    src={IMG(member.profile_path, 300) || "/placeholder.svg"}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
+                <div style={{ 
+                  height: 200, 
+                  overflow: "hidden", 
+                  backgroundColor: "#f5f5f5",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  {renderCastImage(member)}
                 </div>
               }
               size="small"
@@ -45,7 +93,7 @@ const CastSection = ({ cast }: { cast: CastMember[] }) => {
 };
 
 const CrewSection = ({ crew }: { crew: CrewMember[] }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   // Group crew by department and show key roles
   const keyRoles = ["Director", "Producer", "Executive Producer", "Screenplay", "Story", "Writer"];
@@ -66,7 +114,9 @@ const CrewSection = ({ crew }: { crew: CrewMember[] }) => {
               <div>
                 <Text strong>{member.name}</Text>
                 <br />
-                <Text type="secondary" style={{ fontSize: "12px" }}>{member.job}</Text>
+                <Text type="secondary" style={{ fontSize: "12px" }}>
+                  {translateJobTitle(member.job, i18n.language)}
+                </Text>
               </div>
             </Space>
           </Col>
@@ -156,12 +206,22 @@ const ReviewsSection = ({ reviews }: { reviews: Review[] }) => {
 
 export default function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { data: movie, loading, error } = useMovieDetail(id);
-  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+  const { data: movie, isLoading, error } = useGetMovieDetailQuery(
+    { id: id!, lang: i18n.language },
+    { skip: !id }
+  );
+  const navigate = useNavigate();
 
-  if (loading) return <Skeleton active paragraph={{ rows: 8 }} />;
-  if (error) return <Alert type="error" message={t("error")} description={error} showIcon />;
+  if (isLoading) return <Skeleton active paragraph={{ rows: 8 }} />;
+  if (error) return (
+    <Alert 
+      type="error" 
+      message={t("error")} 
+      description={typeof error === 'string' ? error : t("failed_to_load")} 
+      showIcon 
+    />
+  );
   if (!movie) return <Alert type="warning" message={t("movie_not_found")} showIcon />;
 
   return (
@@ -209,7 +269,7 @@ export default function MovieDetailPage() {
                 </Text>
               )}
               <div style={{ margin: "16px 0" }}>
-                {movie.genres?.map(genre => (
+                {movie.genres?.map((genre: { id: number; name: string }) => (
                   <Tag key={genre.id} color="blue" style={{ marginBottom: 4 }}>
                     {genre.name}
                   </Tag>

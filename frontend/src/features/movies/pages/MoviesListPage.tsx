@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Alert, Input, Pagination, Skeleton, Space } from "antd";
 import MovieCard from "../components/MovieCard";
-import type { MoviesResponse } from "../api/types";
-import { fetchMovies } from "../api/moviesApi";
 import styles from "./MoviesListPage.module.scss";
 import { useDebounce } from "../../../shared/hooks/useDebounce";
 import { useTranslation } from "react-i18next";
+import { useGetMoviesQuery } from "../../../store/api/moviesApi";
 
 const PAGE_SIZE = 12;
 
@@ -16,20 +15,11 @@ export default function MoviesListPage() {
 
   const debouncedQ = useDebounce(q, 350);
 
-  const [data, setData] = useState<MoviesResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-
-  useEffect(() => {
-    let isActive = true;
-    setLoading(true);
-    setErr(null);
-    fetchMovies({ page, search: debouncedQ })
-      .then((d) => { if (isActive) setData(d); })
-      .catch((e) => { if (isActive) setErr(e.message || "Failed to load"); })
-      .finally(() => { if (isActive) setLoading(false); });
-    return () => { isActive = false; };
-  }, [page, debouncedQ, i18n.language]);
+  const { data, isLoading, error } = useGetMoviesQuery({
+    page,
+    search: debouncedQ,
+    lang: i18n.language,
+  });
 
   const items = data?.results ?? [];
   const total = data?.total_results ?? 0;
@@ -48,27 +38,34 @@ export default function MoviesListPage() {
         />
       </Space>
 
-      {err && <Alert type="error" message="Error loading movies" description={err} showIcon />}
+      {error && (
+        <Alert 
+          type="error" 
+          message="Error loading movies" 
+          description={typeof error === 'string' ? error : 'Failed to load movies'} 
+          showIcon 
+        />
+      )}
 
       <section className={styles.grid} aria-live="polite">
-        {loading &&
+        {isLoading &&
           skeletons.map((_, i) => (
             <div key={i} className={styles.card}><Skeleton active /></div>
           ))
         }
 
-        {!loading && items.map((m) => (
+        {!isLoading && items.map((m) => (
           <div key={m.id} className={styles.card}>
             <MovieCard movie={m} />
           </div>
         ))}
 
-        {!loading && !err && items.length === 0 && (
+        {!isLoading && !error && items.length === 0 && (
           <p>{t("no_results")}</p>
         )}
       </section>
 
-      {!loading && total > PAGE_SIZE && (
+      {!isLoading && total > PAGE_SIZE && (
         <div className={styles.pagination}>
           <Pagination
             current={data?.page ?? page}
