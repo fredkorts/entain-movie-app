@@ -11,9 +11,10 @@ const IMG = (p: string | null, w: string = TMDB_IMAGE_SIZES.LARGE) => getTmdbIma
 
 interface MovieHeroProps {
   movie: MovieDetail;
+  titleId?: string;
 }
 
-export default function MovieHero({ movie }: MovieHeroProps) {
+export default function MovieHero({ movie, titleId }: MovieHeroProps) {
   const { t, i18n } = useTranslation();
 
   const heroStyle: React.CSSProperties = {
@@ -36,7 +37,7 @@ export default function MovieHero({ movie }: MovieHeroProps) {
             </Col>
             <Col xs={24} md={18}>
               <div className={styles.movieInfo}>
-                <Title level={1} className={styles.title}>
+                <Title level={1} className={styles.title} id={titleId}>
                   {movie.title}
                 </Title>
                 

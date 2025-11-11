@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Alert, Input, Pagination, Skeleton, Space } from "antd";
 import MovieCard from "../../components/MovieCard";
 import styles from "./MoviesListPage.module.scss";
@@ -14,6 +14,7 @@ export default function MoviesListPage() {
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
   const { t, i18n } = useTranslation();
+  const mainRef = useRef<HTMLElement>(null);
 
   const debouncedQ = useDebounce(q, SEARCH_DEBOUNCE_DELAY);
 
@@ -26,14 +27,31 @@ export default function MoviesListPage() {
   const items = data?.results ?? [];
   const total = data?.total_results ?? 0;
 
+  // Document title update based on debounced search query
+  useEffect(() => {
+    document.title = debouncedQ ? `Search: ${debouncedQ} - Movie App` : "Movies - Movie App";
+  }, [debouncedQ]);
+
+  // One-time focus management on mount
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.focus();
+    }
+  }, []); // Empty dependency array for one-time on mount
+
   return (
-    <main className={styles.wrap}>
+    <main className={styles.wrap} ref={mainRef} tabIndex={-1} aria-labelledby="page-title">
+      <h1 id="page-title" className="sr-only">
+        {q ? `Search results for: ${q}` : "Movies"}
+      </h1>
+      
       <Space direction="vertical" size="large" className={styles.toolbar}>
         <Input.Search
           placeholder={t("search_placeholder")}
           allowClear
           value={q}
           onChange={(e) => { setPage(1); setQ(e.target.value); }}
+          aria-label={t("search_placeholder") || "Search movies"}
         />
       </Space>
 

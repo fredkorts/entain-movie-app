@@ -1,5 +1,6 @@
 {
   "app_title": "Поиск фильмов",
+  "app_copyright": "© 2024 Movie Entertainment",
   "search_placeholder": "Искать фильмы",
   "no_results": "Ничего не найдено",
   "back": "Назад",
@@ -16,5 +17,13 @@
   "videos": "Трейлеры и Видео",
   "reviews": "Обзоры",
   "overview": "Обзор",
-  "read_more": "Читать далее"
+  "read_more": "Читать далее",
+  "error_boundary_title": "Что-то пошло не так",
+  "error_boundary_message": "Произошла неожиданная ошибка. Пожалуйста, обновите страницу и попробуйте снова.",
+  "error_boundary_retry": "Попробовать снова",
+  "error_boundary_details": "Подробности ошибки (только в разработке)",
+  "skip_to_main_content": "Перейти к основному содержанию",
+  "skip_to_navigation": "Перейти к навигации",
+  "toggle_theme": "Переключить тему",
+  "change_language": "Изменить язык"
 }

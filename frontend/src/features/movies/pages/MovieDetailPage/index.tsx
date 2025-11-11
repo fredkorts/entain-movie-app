@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Alert, Button, Space, Skeleton, Typography } from "antd";
 import { useTranslation } from "react-i18next";
+import { useEffect, useRef } from "react";
 import { getErrorMessage } from "../../../../lib/errorUtils";
 import { useGetMovieDetailQuery } from "../../../../store/api/moviesApi";
 import { DEFAULT_LANGUAGE } from "../../../../lib/constants";
@@ -21,6 +22,20 @@ export default function MovieDetailPage() {
     { skip: !id }
   );
   const navigate = useNavigate();
+  const mainRef = useRef<HTMLElement>(null);
+
+  // Focus management and document title
+  useEffect(() => {
+    if (movie) {
+      document.title = `${movie.title} - Movie App`;
+      // Focus the main content after route change
+      if (mainRef.current) {
+        mainRef.current.focus();
+      }
+    } else if (!isLoading) {
+      document.title = "Movie Not Found - Movie App";
+    }
+  }, [movie, isLoading]);
 
   if (isLoading) return (
     <div className={styles.page}>
@@ -52,7 +67,7 @@ export default function MovieDetailPage() {
   );
 
   return (
-    <main className={styles.page}>
+    <main className={styles.page} ref={mainRef} tabIndex={-1} aria-labelledby="movie-title">
       <Space className={styles.backButton}>
         <Button type="default" onClick={() => navigate(-1)}>
           {t("back")}
@@ -60,7 +75,7 @@ export default function MovieDetailPage() {
       </Space>
 
       {/* Hero Section */}
-      <MovieHero movie={movie} />
+      <MovieHero movie={movie} titleId="movie-title" />
 
       {/* Overview */}
       <div className={styles.overviewSection}>

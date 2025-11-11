@@ -22,6 +22,13 @@ export default function VideosSection({ videos }: VideosSectionProps) {
     window.open(getYouTubeVideoUrl(videoKey), EXTERNAL_LINK_TARGET);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent, videoKey: string) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleVideoClick(videoKey);
+    }
+  };
+
   return (
     <div className={styles.section}>
       <Title level={3} className={styles.title}>{t("videos")}</Title>
@@ -34,18 +41,21 @@ export default function VideosSection({ videos }: VideosSectionProps) {
                 <div 
                   className={styles.thumbnailContainer}
                   onClick={() => handleVideoClick(video.key)}
+                  onKeyDown={(e) => handleKeyDown(e, video.key)}
+                  tabIndex={0}
+                  role="button"
+                  aria-label={`Play trailer: ${video.name}`}
                 >
                   <img
-                    alt={video.name}
+                    alt={`Trailer thumbnail for ${video.name}`}
                     src={getYouTubeThumbnailUrl(video.key)}
                     className={styles.thumbnail}
                   />
-                  <div className={styles.playIcon}>
+                  <div className={styles.playIcon} aria-hidden="true">
                     <PlayCircleOutlined />
                   </div>
                 </div>
               }
-              onClick={() => handleVideoClick(video.key)}
             >
               <Card.Meta title={<span className={styles.videoTitle}>{video.name}</span>} />
             </Card>

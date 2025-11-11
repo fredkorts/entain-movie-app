@@ -1,0 +1,14 @@
+.container {
+  padding: 24px;
+  text-align: center;
+}
+
+.errorDetails {
+  margin-top: 16px;
+  text-align: left;
+}
+
+.errorStack {
+  font-size: 12px;
+  margin-top: 8px;
+}

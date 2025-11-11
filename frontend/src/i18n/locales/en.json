@@ -1,5 +1,6 @@
 {
   "app_title": "Movie Search",
+  "app_copyright": "© 2024 Movie Entertainment",
   "search_placeholder": "Search movies",
   "no_results": "No results found",
   "back": "Back",
@@ -16,5 +17,13 @@
   "videos": "Trailers & Videos",
   "reviews": "Reviews",
   "overview": "Overview",
-  "read_more": "Read more"
+  "read_more": "Read more",
+  "error_boundary_title": "Something went wrong",
+  "error_boundary_message": "An unexpected error occurred. Please refresh the page and try again.",
+  "error_boundary_retry": "Try Again",
+  "error_boundary_details": "Error Details (Development Only)",
+  "skip_to_main_content": "Skip to main content",
+  "skip_to_navigation": "Skip to navigation",
+  "toggle_theme": "Toggle theme",
+  "change_language": "Change language"
 }

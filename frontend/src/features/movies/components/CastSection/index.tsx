@@ -1,9 +1,10 @@
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, memo } from "react";
 import { Card, Typography, Avatar, Row, Col } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import type { CastMember } from "../../api/types";
 import { getTmdbImageUrl, TMDB_IMAGE_SIZES } from "../../../../lib/constants";
+import { useImageErrorHandling } from "../../../../shared/hooks/useImageErrorHandling";
 import styles from "./CastSection.module.scss";
 
 const { Title, Text } = Typography;
@@ -14,22 +15,15 @@ interface CastSectionProps {
   cast: CastMember[];
 }
 
-export default function CastSection({ cast }: CastSectionProps) {
+function CastSection({ cast }: CastSectionProps) {
   const { t } = useTranslation();
-  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
-
-  // Reset failed images when cast changes (e.g., language switch or different movie)
-  useEffect(() => {
-    setFailedImages(new Set());
-  }, [cast]);
-
-  const handleImageError = useCallback((memberId: number) => {
-    setFailedImages(prev => new Set(prev).add(memberId));
-  }, []);
+  const { handleImageError, hasImageFailed } = useImageErrorHandling({
+    resetOnDepsChange: [cast]
+  });
 
   const renderCastImage = useCallback((member: CastMember) => {
-    const hasImageFailed = failedImages.has(member.id);
-    const hasProfilePath = member.profile_path && !hasImageFailed;
+    const imageHasFailed = hasImageFailed(member.id);
+    const hasProfilePath = member.profile_path && !imageHasFailed;
 
     if (hasProfilePath) {
       return (
@@ -52,7 +46,7 @@ export default function CastSection({ cast }: CastSectionProps) {
         />
       </div>
     );
-  }, [failedImages, handleImageError]);
+  }, [hasImageFailed, handleImageError]);
 
   if (!cast || cast.length === 0) return null;
 
@@ -82,3 +76,5 @@ export default function CastSection({ cast }: CastSectionProps) {
     </div>
   );
 }
+
+export default memo(CastSection);
