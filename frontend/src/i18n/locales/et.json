@@ -10,5 +10,11 @@
   "movie_not_found": "Filmi ei leitud",
   "failed_to_load": "Filmi laadimine ebaõnnestus",
   "error": "Viga",
-  "minutes": "min"
+  "minutes": "min",
+  "cast": "Näitlejad",
+  "crew": "Võtmeisikud",
+  "videos": "Treilerid ja Videod",
+  "reviews": "Arvustused",
+  "overview": "Ülevaade",
+  "read_more": "Loe edasi"
 }

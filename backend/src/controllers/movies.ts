@@ -45,13 +45,17 @@ if (!API_KEY) {
   throw new Error('TMDB_API_KEY environment variable is required');
 }
 
-const langParam = (lang?: string) =>
-  new URLSearchParams({
+const langParam = (lang?: string) => {
+  const params = new URLSearchParams({
     api_key: API_KEY,
     language: lang || 'en',
     include_image_language: `${lang || 'en'},null`,
     include_video_language: `${lang || 'en'},en,null`,
   });
+  // Add append_to_response to get all the additional data in one call
+  params.set('append_to_response', 'credits,videos,images,reviews');
+  return params;
+};
 
 export const listMovies: RequestHandler = async (req, res, next) => {
   try {

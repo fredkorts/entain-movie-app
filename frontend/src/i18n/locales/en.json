@@ -10,5 +10,11 @@
   "movie_not_found": "Movie not found",
   "failed_to_load": "Failed to load movie",
   "error": "Error",
-  "minutes": "min"
+  "minutes": "min",
+  "cast": "Cast",
+  "crew": "Key Crew",
+  "videos": "Trailers & Videos",
+  "reviews": "Reviews",
+  "overview": "Overview",
+  "read_more": "Read more"
 }

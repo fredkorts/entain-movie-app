@@ -24,8 +24,11 @@ app.get('/health', healthHandler);
  *   - /api/movies            -> /movies
  *   - /api/movies/:id?lang=  -> /movies/:id?lang=
  * so mount the router at /movies in Express.
+ * 
+ * For local development, we also mount at /api/movies to match frontend expectations.
  */
 app.use('/movies', moviesRouter);
+app.use('/api/movies', moviesRouter); // Add this for local development
 
 // 404 – keep it chatty so we can see what missed
 const notFound: RequestHandler = (req, res) => {
