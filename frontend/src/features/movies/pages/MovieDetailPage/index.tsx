@@ -38,38 +38,40 @@ export default function MovieDetailPage() {
   }, [movie, isLoading]);
 
   if (isLoading) return (
-    <div className={styles.page}>
+    <div className={styles.page} data-testid="movie-detail-loading">
       <Skeleton active paragraph={{ rows: 8 }} className={styles.loadingSkeleton} />
     </div>
   );
   
   if (error) return (
-    <div className={styles.page}>
+    <div className={styles.page} data-testid="movie-detail-error">
       <Alert 
         type="error" 
         message={t("error")} 
         description={getErrorMessage(error, t("failed_to_load"))} 
         showIcon 
         className={styles.errorAlert}
+        data-testid="error-alert"
       />
     </div>
   );
   
   if (!movie) return (
-    <div className={styles.page}>
+    <div className={styles.page} data-testid="movie-not-found">
       <Alert 
         type="warning" 
         message={t("movie_not_found")} 
         showIcon 
         className={styles.errorAlert}
+        data-testid="not-found-alert"
       />
     </div>
   );
 
   return (
-    <main className={styles.page} ref={mainRef} tabIndex={-1} aria-labelledby="movie-title">
+    <main className={styles.page} ref={mainRef} tabIndex={-1} aria-labelledby="movie-title" data-testid="movie-detail-page">
       <Space className={styles.backButton}>
-        <Button type="default" onClick={() => navigate(-1)}>
+        <Button type="default" onClick={() => navigate(-1)} data-testid="back-button">
           {t("back")}
         </Button>
       </Space>

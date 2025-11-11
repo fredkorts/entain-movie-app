@@ -8,6 +8,7 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
 afterEach(() => {
   cleanup();
   server.resetHandlers();
+  localStorage.clear();
 });
 afterAll(() => server.close());
 
@@ -46,6 +47,9 @@ const localStorageMock = (() => {
     },
     clear: () => {
       store = {};
+    },
+    get length() {
+      return Object.keys(store).length;
     },
   };
 })();

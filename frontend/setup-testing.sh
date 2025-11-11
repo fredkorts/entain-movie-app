@@ -2,11 +2,17 @@
 # Complete Testing Setup Script
 # Run this from the frontend directory
 
+# Enable strict error handling
+set -euo pipefail
+
+# Trap errors and provide clear failure messages
+trap 'echo "❌ Error: Testing setup failed at line $LINENO. Please check the error messages above." >&2; exit 1' ERR
+
 echo "🧪 Installing Testing Dependencies..."
 echo ""
 
 # Install all testing dependencies
-pnpm add -D \
+if ! pnpm add -D \
   vitest \
   @vitest/ui \
   jsdom \
@@ -15,7 +21,10 @@ pnpm add -D \
   @testing-library/jest-dom \
   @testing-library/user-event \
   msw \
-  @playwright/test
+  @playwright/test; then
+  echo "❌ Error: Failed to install testing dependencies with pnpm" >&2
+  exit 1
+fi
 
 echo ""
 echo "✅ Testing dependencies installed!"
@@ -23,7 +32,10 @@ echo ""
 
 # Install Playwright browsers
 echo "🎭 Installing Playwright browsers..."
-npx playwright install
+if ! npx playwright install; then
+  echo "❌ Error: Failed to install Playwright browsers" >&2
+  exit 1
+fi
 
 echo ""
 echo "✅ Playwright browsers installed!"

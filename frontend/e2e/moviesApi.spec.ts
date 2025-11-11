@@ -73,21 +73,23 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.waitForSelector('[class*="card"]', { timeout: 10000 });
       
       // Navigate to page 2
-      const pagination = page.locator('[class*="pagination"]');
+      const pagination = page.getByTestId('pagination');
       await expect(pagination).toBeVisible({ timeout: 5000 });
       
       const page2Button = page.getByRole('listitem').filter({ hasText: '2' }).first();
-      if (await page2Button.isVisible()) {
-        await page2Button.click();
-        
-        // Both search and page should be in URL
-        await expect(page).toHaveURL(/q=action/);
-        await expect(page).toHaveURL(/page=2/);
-        
-        // Search input should still have value
-        const searchInput = page.getByPlaceholder(/search/i);
-        await expect(searchInput).toHaveValue('action');
-      }
+      
+      // Assert pagination button is visible (fail if not found)
+      await expect(page2Button).toBeVisible({ timeout: 5000 });
+      
+      await page2Button.click();
+      
+      // Both search and page should be in URL
+      await expect(page).toHaveURL(/q=action/);
+      await expect(page).toHaveURL(/page=2/);
+      
+      // Search input should still have value
+      const searchInput = page.getByPlaceholder(/search/i);
+      await expect(searchInput).toHaveValue('action');
     });
 
     test('should clear search and reload all movies', async ({ page }) => {
@@ -100,14 +102,18 @@ test.describe('Movies API Integration E2E Tests', () => {
       await searchInput.clear();
       await searchInput.press('Enter');
       
-      // Wait for results to reload
-      await page.waitForTimeout(600);
+      // Wait for API response after clearing search
+      await page.waitForResponse(
+        resp => resp.url().includes('/api/movies') && !resp.url().includes('q=') && resp.status() === 200,
+        { timeout: 10000 }
+      );
       
       // URL should not have search parameter
-      await expect(page).toHaveURL(/^(?!.*q=)/);
+      await expect(page).toHaveURL(url => !url.toString().includes('q='));
       
-      // Movies should still be visible
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      // Movies should be visible
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 5000 });
     });
   });
 
@@ -174,27 +180,33 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/');
       
       // Wait for initial movies to load
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       
       // Find and click language switcher
-      const langSwitcher = page.locator('button[aria-label*="language"], button[class*="language"]').first();
+      const langSwitcher = page.locator('button[aria-label="Change language"]');
       
-      if (await langSwitcher.isVisible()) {
-        await langSwitcher.click();
-        
-        // Select a different language (e.g., Russian or Estonian)
-        const langOption = page.locator('[role="menuitem"], button').filter({ hasText: /Русский|Eesti/ }).first();
-        
-        if (await langOption.isVisible({ timeout: 2000 })) {
-          await langOption.click();
-          
-          // Wait for movies to reload with new language
-          await page.waitForTimeout(1000);
-          
-          // Movies should still be visible (possibly with different titles)
-          await page.waitForSelector('[class*="card"]', { timeout: 10000 });
-        }
-      }
+      // Assert language switcher is visible
+      await expect(langSwitcher).toBeVisible();
+      await langSwitcher.click();
+      
+      // Wait for dropdown menu and select a different language (Estonian)
+      const dropdown = page.locator('[role="menu"]');
+      await expect(dropdown).toBeVisible();
+      
+      const langOption = page.locator('[role="menuitem"]').filter({ hasText: /ET|RU/ }).first();
+      await expect(langOption).toBeVisible({ timeout: 5000 });
+      
+      await langOption.click();
+      
+      // Wait for movies to reload with new language
+      await page.waitForResponse(
+        resp => resp.url().includes('/api/movies') && resp.status() === 200,
+        { timeout: 10000 }
+      );
+      
+      // Movies should still be visible (possibly with different titles)
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
     });
 
     test('should show movie details in selected language', async ({ page }) => {
@@ -202,37 +214,53 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/');
       
       // Change language first
-      const langSwitcher = page.locator('button[aria-label*="language"], button[class*="language"]').first();
+      const langSwitcher = page.locator('button[aria-label="Change language"]');
       
-      if (await langSwitcher.isVisible()) {
-        await langSwitcher.click();
-        
-        const langOption = page.locator('[role="menuitem"], button').filter({ hasText: /Русский/ }).first();
-        
-        if (await langOption.isVisible({ timeout: 2000 })) {
-          await langOption.click();
-          await page.waitForTimeout(500);
-        }
-      }
+      // Assert language switcher is visible
+      await expect(langSwitcher).toBeVisible();
+      await langSwitcher.click();
+      
+      // Wait for dropdown menu
+      const dropdown = page.locator('[role="menu"]');
+      await expect(dropdown).toBeVisible();
+      
+      const langOption = page.locator('[role="menuitem"]').filter({ hasText: /RU/ }).first();
+      await expect(langOption).toBeVisible({ timeout: 5000 });
+      
+      await langOption.click();
+      
+      // Wait for language change to propagate
+      await expect.poll(async () => {
+        return await page.locator('html').getAttribute('lang');
+      }).toBe('ru');
       
       // Navigate to movie detail
       await page.goto('/movie/1');
       
       // Wait for content to load
-      await page.waitForSelector('h1', { timeout: 10000 });
+      const title = page.getByRole('heading', { level: 1 });
+      await expect(title).toBeVisible({ timeout: 10000 });
       
-      // Content should be loaded (potentially in Russian)
-      const title = page.locator('h1');
-      await expect(title).toBeVisible();
+      // Verify page is loaded
+      await expect(page.getByTestId('movie-detail-page')).toBeVisible();
     });
   });
 
   test.describe('Cache and Performance', () => {
     test('should cache movie list results', async ({ page }) => {
+      let apiCallCount = 0;
+      
+      // Track API calls
+      await page.route('**/api/movies**', route => {
+        apiCallCount++;
+        route.continue();
+      });
+      
       await page.goto('/');
       
       // Wait for initial load
       await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const initialCallCount = apiCallCount;
       
       // Navigate to a detail page
       const firstMovieLink = page.locator('a[href*="/movie/"]').first();
@@ -243,11 +271,14 @@ test.describe('Movies API Integration E2E Tests', () => {
       // Go back to list
       await page.goBack();
       
-      // Movies should load quickly from cache (no skeleton/loading state)
-      await page.waitForSelector('[class*="card"]', { timeout: 2000 });
+      // Movies should load from cache - no new API call
+      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
       const movieCards = page.locator('[class*="card"]');
       const count = await movieCards.count();
       expect(count).toBeGreaterThan(0);
+      
+      // Verify no additional API call was made
+      expect(apiCallCount).toBe(initialCallCount);
     });
 
     test('should handle rapid navigation between list and detail', async ({ page }) => {
@@ -275,20 +306,60 @@ test.describe('Movies API Integration E2E Tests', () => {
 
   test.describe('Error Recovery', () => {
     test('should handle network timeout gracefully', async ({ page }) => {
-      // This test simulates slow network by checking if loading states work
+      // Intercept the movies API request and delay the response to simulate slow network
+      await page.route('**/api/movies*', async (route) => {
+        // Delay response by 3 seconds
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        // Then abort to simulate timeout/network failure
+        await route.abort('timedout');
+      });
+      
+      // Navigate to the page
       await page.goto('/');
       
-      // Should show some loading indicator initially
-      const hasContent = await page.locator('[class*="card"], [class*="spin"], [class*="loading"]').first().isVisible({ timeout: 10000 });
-      expect(hasContent).toBe(true);
+      // Should show loading indicator while request is pending
+      // Ant Design uses Skeleton for loading states
+      const loadingSkeleton = page.locator('.ant-skeleton').first();
+      await expect(loadingSkeleton).toBeVisible({ timeout: 2000 });
       
-      // Eventually should show movies or error message
-      await page.waitForTimeout(5000);
-      const hasMoviesOrError = 
-        (await page.locator('[class*="card"]').count() > 0) ||
-        (await page.locator('[class*="error"]').isVisible());
+      // After timeout, should show error alert
+      const errorAlert = page.getByTestId('error-alert');
+      await expect(errorAlert).toBeVisible({ timeout: 5000 });
       
-      expect(hasMoviesOrError).toBe(true);
+      // Verify error message is displayed
+      await expect(errorAlert).toContainText(/error|failed/i);
+      
+      // Cleanup: restore normal routing
+      await page.unroute('**/api/movies*');
+    });
+
+    test('should show loading state during slow network', async ({ page }) => {
+      // Intercept API request and delay response (but complete successfully)
+      await page.route('**/api/movies*', async (route) => {
+        // Delay by 2 seconds
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        // Then continue with the actual request
+        await route.continue();
+      });
+      
+      await page.goto('/');
+      
+      // Should show loading skeleton initially
+      const loadingSkeleton = page.locator('.ant-skeleton').first();
+      await expect(loadingSkeleton).toBeVisible({ timeout: 1000 });
+      
+      // After delay, should show movie cards
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 5000 });
+      
+      // Verify multiple cards loaded
+      const count = await movieCards.count();
+      expect(count).toBeGreaterThan(0);
+      
+      // Cleanup
+      await page.unroute('**/api/movies*');
     });
 
     test('should recover from failed search', async ({ page }) => {
@@ -296,23 +367,39 @@ test.describe('Movies API Integration E2E Tests', () => {
       
       const searchInput = page.getByPlaceholder(/search/i);
       
-      // Try a search that might fail or return no results
+      // Try a search that returns no results
       await searchInput.fill('zzznonexistent999');
-      await page.waitForTimeout(600);
       
-      // Should show empty state or handle gracefully
-      await page.waitForTimeout(2000);
+      // Wait for search API response
+      await page.waitForResponse(
+        resp => resp.url().includes('/api/movies') && resp.status() === 200,
+        { timeout: 10000 }
+      );
+      
+      // Should show empty state with "No movies found" message
+      const emptyState = page.getByTestId('empty-state');
+      await expect(emptyState).toBeVisible({ timeout: 5000 });
+      
+      const noResultsMessage = page.getByText(/no movies found/i);
+      await expect(noResultsMessage).toBeVisible();
       
       // Now do a valid search
       await searchInput.clear();
       await searchInput.fill('action');
-      await page.waitForTimeout(600);
       
-      // Should recover and show results
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
-      const movieCards = page.locator('[class*="card"]');
+      // Wait for new search API response
+      await page.waitForResponse(
+        resp => resp.url().includes('/api/movies') && resp.url().includes('q=action') && resp.status() === 200,
+        { timeout: 10000 }
+      );
+      
+      // Should recover and show movie cards
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 5000 });
+      
+      // Verify multiple cards loaded (meaningful assertion)
       const count = await movieCards.count();
-      expect(count).toBeGreaterThanOrEqual(0);
+      expect(count).toBeGreaterThan(0);
     });
   });
 });

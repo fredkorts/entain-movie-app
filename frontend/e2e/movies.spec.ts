@@ -16,11 +16,12 @@ test.describe('Movies List Page', () => {
     await page.goto('/');
     
     // Wait for movies to load
-    await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+    const movieCards = page.getByTestId('movie-card');
+    await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
     
     // Should have multiple movie cards
-    const movieCards = page.locator('[class*="card"]');
-    await expect(movieCards.first()).toBeVisible();
+    const count = await movieCards.count();
+    expect(count).toBeGreaterThan(0);
   });
 
   test('should search for movies', async ({ page }) => {
@@ -29,9 +30,6 @@ test.describe('Movies List Page', () => {
     const searchInput = page.getByPlaceholder(/search/i);
     await searchInput.fill('action');
     
-    // Wait for search results to update
-    await page.waitForTimeout(500);
-    
     // URL should contain search query
     await expect(page).toHaveURL(/q=action/);
   });
@@ -39,34 +37,31 @@ test.describe('Movies List Page', () => {
   test('should navigate to movie detail page', async ({ page }) => {
     await page.goto('/');
     
-    // Wait for movies to load
-    await page.waitForSelector('[class*="card"]', { timeout: 10000 });
-    
-    // Click on first movie card link
-    const firstMovieLink = page.locator('a[href*="/movie/"]').first();
-    await firstMovieLink.click();
+    // Wait for movies to load and click first movie card
+    const firstMovieCard = page.getByTestId('movie-card').first();
+    await expect(firstMovieCard).toBeVisible({ timeout: 10000 });
+    await firstMovieCard.click();
     
     // Should navigate to movie detail page
     await expect(page).toHaveURL(/\/movie\/\d+/);
     
     // Wait for movie detail content
-    await page.waitForSelector('h1', { timeout: 10000 });
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible({ timeout: 10000 });
   });
 
   test('should paginate through results', async ({ page }) => {
     await page.goto('/');
     
     // Wait for pagination to appear
-    await page.waitForSelector('[class*="pagination"]', { timeout: 10000 });
+    await page.waitForSelector('[data-testid="pagination"]', { timeout: 10000 });
     
     // Click on page 2 or next button
-    const nextButton = page.getByRole('listitem').filter({ hasText: '2' }).first();
-    if (await nextButton.isVisible()) {
-      await nextButton.click();
-      
-      // URL should update with page parameter
-      await expect(page).toHaveURL(/page=2/);
-    }
+    const nextButton = page.getByRole('button', { name: /next|2/i });
+    await expect(nextButton).toBeVisible();
+    await nextButton.click();
+    
+    // URL should update with page parameter
+    await expect(page).toHaveURL(/page=2/);
   });
 
   test('should handle empty search results', async ({ page }) => {
@@ -75,12 +70,19 @@ test.describe('Movies List Page', () => {
     const searchInput = page.getByPlaceholder(/search/i);
     await searchInput.fill('zzzzznonexistentmovie123');
     
-    // Wait for results to update
-    await page.waitForTimeout(500);
+    // Wait for search API response to complete
+    await page.waitForResponse(
+      resp => resp.url().includes('/api/movies') && resp.status() === 200,
+      { timeout: 10000 }
+    );
     
-    // Should show empty state or no results message
-    const emptyState = page.locator('[class*="emptyState"]');
-    await expect(emptyState).toBeVisible({ timeout: 5000 });
+    // Should show empty state with "No movies found" message
+    const noResultsMessage = page.getByText(/no movies found|no results found/i);
+    await expect(noResultsMessage).toBeVisible({ timeout: 5000 });
+    
+    // Verify the hint message is also displayed
+    const hintMessage = page.getByText(/we couldn't find any movies matching/i);
+    await expect(hintMessage).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -115,23 +117,26 @@ test.describe('Theme Switching', () => {
   test('should toggle between light and dark theme', async ({ page }) => {
     await page.goto('/');
     
-    // Find theme toggle button (adjust selector based on your implementation)
-    const themeToggle = page.locator('button[aria-label*="theme"], button[class*="theme"]').first();
+    // Find theme toggle button using test id
+    const themeToggle = page.getByTestId('theme-toggle');
     
-    if (await themeToggle.isVisible()) {
-      // Get initial theme
-      const initialTheme = await page.locator('html').getAttribute('data-theme');
-      
-      // Click toggle
-      await themeToggle.click();
-      
-      // Wait for theme change
-      await page.waitForTimeout(300);
-      
-      // Theme should have changed
-      const newTheme = await page.locator('html').getAttribute('data-theme');
-      expect(newTheme).not.toBe(initialTheme);
-    }
+    // Assert the theme toggle is visible (fail if not found)
+    await expect(themeToggle).toBeVisible();
+    
+    // Get initial theme
+    const initialTheme = await page.locator('html').getAttribute('data-theme');
+    
+    // Click toggle
+    await themeToggle.click();
+    
+    // Wait for theme change using Playwright's polling mechanism
+    await expect.poll(async () => {
+      return await page.locator('html').getAttribute('data-theme');
+    }).not.toBe(initialTheme);
+    
+    // Verify the theme actually changed to the opposite value
+    const expectedTheme = initialTheme === 'dark' ? 'light' : 'dark';
+    await expect(page.locator('html')).toHaveAttribute('data-theme', expectedTheme);
   });
 });
 
@@ -139,14 +144,40 @@ test.describe('Language Switching', () => {
   test('should switch between languages', async ({ page }) => {
     await page.goto('/');
     
-    // Find language switcher (adjust selector based on your implementation)
-    const langSwitcher = page.locator('button[aria-label*="language"], button[class*="language"]').first();
+    // Find language switcher button
+    const langSwitcher = page.locator('button[aria-label="Change language"]');
     
-    if (await langSwitcher.isVisible()) {
-      await langSwitcher.click();
-      
-      // Should show language options
-      await expect(page.locator('[role="menu"], [class*="dropdown"]')).toBeVisible();
-    }
+    // Assert the language switcher is visible (fail if not found)
+    await expect(langSwitcher).toBeVisible();
+    
+    // Verify initial language is English
+    const initialPlaceholder = page.locator('input[placeholder="Search movies"]');
+    await expect(initialPlaceholder).toBeVisible();
+    
+    // Click the language switcher to open menu
+    await langSwitcher.click();
+    
+    // Wait for dropdown menu to appear
+    const dropdown = page.locator('[role="menu"]');
+    await expect(dropdown).toBeVisible();
+    
+    // Select Estonian (ET) from the menu
+    const estonianOption = page.locator('[role="menuitem"]').filter({ hasText: 'ET' });
+    await estonianOption.click();
+    
+    // Wait for language change to propagate
+    await page.waitForTimeout(500);
+    
+    // Verify the language changed by checking a translatable element
+    // Search placeholder should now be "Otsi filme" (Estonian)
+    const estonianPlaceholder = page.locator('input[placeholder="Otsi filme"]');
+    await expect(estonianPlaceholder).toBeVisible();
+    
+    // Additionally verify the HTML lang attribute changed
+    const htmlLang = await page.locator('html').getAttribute('lang');
+    expect(htmlLang).toBe('et');
+    
+    // Verify language switcher shows current language
+    await expect(langSwitcher).toContainText('ET');
   });
 });

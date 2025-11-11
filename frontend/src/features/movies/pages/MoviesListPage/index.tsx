@@ -68,13 +68,14 @@ export default function MoviesListPage() {
         {q ? `Search results for: ${q}` : "Movies"}
       </h1>
       
-      <Space direction="vertical" size="large" className={styles.toolbar}>
+      <Space direction="vertical" size="large" className={styles.toolbar} data-testid="search-toolbar">
         <Input.Search
           placeholder={t("search_placeholder")}
           allowClear
           value={q}
           onChange={(e) => handleSearchChange(e.target.value)}
           aria-label={t("search_placeholder") || "Search movies"}
+          data-testid="movie-search-input"
         />
       </Space>
 
@@ -83,11 +84,12 @@ export default function MoviesListPage() {
           type="error" 
           message={t("error")} 
           description={getErrorMessage(error, t("failed_to_load"))} 
-          showIcon 
+          showIcon
+          data-testid="error-alert"
         />
       )}
 
-      <section className={styles.grid} aria-live="polite">
+      <section className={styles.grid} aria-live="polite" data-testid="movies-grid">
         {isLoading &&
           SKELETONS.map((_, i) => (
             <div key={i} className={styles.card}><Skeleton active /></div>
@@ -102,7 +104,7 @@ export default function MoviesListPage() {
       </section>
 
       {!isLoading && !error && items.length === 0 && (
-        <div className={styles.emptyState}>
+        <div className={styles.emptyState} data-testid="empty-state">
           <Empty
             image={<SearchOutlined style={{ fontSize: 64, color: 'var(--color-text-tertiary)' }} />}
             description={
@@ -122,7 +124,7 @@ export default function MoviesListPage() {
       )}
 
       {!isLoading && total > MOVIES_PAGE_SIZE && (
-        <div className={styles.pagination}>
+        <div className={styles.pagination} data-testid="pagination">
           <Pagination
             current={data?.page ?? page}
             pageSize={MOVIES_PAGE_SIZE}

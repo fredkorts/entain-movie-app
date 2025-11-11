@@ -14,6 +14,7 @@ export default function ThemeToggle() {
       checkedChildren="🌙"
       unCheckedChildren="☀️"
       aria-label={t("toggle_theme") || "Toggle theme"}
+      data-testid="theme-toggle"
     />
   );
 }

@@ -19,17 +19,18 @@ function MovieCard({ movie }: { movie: MovieSummary }) {
   );
   
   return (
-    <Link to={`/movie/${movie.id}`} aria-label={`Open ${movie.title}`} className={styles.link}>
-      <Card hoverable className={styles.card}>
+    <Link to={`/movie/${movie.id}`} aria-label={`Open ${movie.title}`} className={styles.link} data-testid="movie-card">
+      <Card hoverable className={styles.card} data-testid="movie-card-content">
         <img
           src={posterUrl}
           alt={movie.title}
           className={styles.posterImage}
           loading="lazy"
+          data-testid="movie-card-poster"
         />
         <div className={styles.content}>
-          <div className={styles.title}>{movie.title}</div>
-          <div className={styles.year}>{year}</div>
+          <div className={styles.title} data-testid="movie-card-title">{movie.title}</div>
+          <div className={styles.year} data-testid="movie-card-year">{year}</div>
         </div>
       </Card>
     </Link>
