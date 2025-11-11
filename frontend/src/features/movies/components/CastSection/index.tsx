@@ -31,7 +31,13 @@ function CastSection({ cast }: CastSectionProps) {
           alt={member.name}
           src={IMG(member.profile_path, TMDB_IMAGE_SIZES.MEDIUM)}
           className={styles.castImage}
-          onError={() => handleImageError(member.id)}
+          onError={(e) => {
+            console.warn(`Failed to load image for ${member.name}:`, IMG(member.profile_path, TMDB_IMAGE_SIZES.MEDIUM));
+            handleImageError(member.id);
+            // Prevent infinite error loops
+            e.currentTarget.style.display = 'none';
+          }}
+          loading="lazy"
         />
       );
     }
@@ -55,7 +61,7 @@ function CastSection({ cast }: CastSectionProps) {
       <Title level={3} className={styles.title}>{t("cast")}</Title>
       <Row gutter={[16, 16]}>
         {cast.slice(0, 8).map((member) => (
-          <Col key={member.id} xs={12} sm={8} md={6} lg={4} className={styles.castCol}>
+          <Col key={member.id} xs={12} sm={8} md={6} lg={5} className={styles.castCol}>
             <Card
               hoverable
               cover={

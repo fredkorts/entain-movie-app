@@ -84,16 +84,17 @@
   }
 }
 
-/* Theme support */
-[data-theme="dark"] .card {
-  background-color: var(--color-bg-secondary);
-  border-color: var(--color-border-secondary);
+/* Theme support - Force override Ant Design's Card styles */
+.card {
+  background-color: var(--color-bg-secondary) !important;
+  border-color: var(--color-border-secondary) !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-[data-theme="dark"] .title {
-  color: var(--color-text-primary);
+.title {
+  color: var(--color-text-primary) !important;
 }
 
-[data-theme="dark"] .year {
-  color: var(--color-text-secondary);
+.year {
+  color: var(--color-text-secondary) !important;
 }

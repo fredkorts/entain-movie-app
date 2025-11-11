@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import styles from "./SkipLinks.module.css";
+import styles from "./SkipLinks.module.scss";
 
 export default function SkipLinks() {
   const { t } = useTranslation();

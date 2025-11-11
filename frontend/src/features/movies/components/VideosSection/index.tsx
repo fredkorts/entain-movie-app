@@ -3,7 +3,7 @@ import { PlayCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import type { Video } from "../../api/types";
 import { getYouTubeVideoUrl, getYouTubeThumbnailUrl, EXTERNAL_LINK_TARGET } from "../../../../lib/constants";
-import styles from "./VideosSection.module.css";
+import styles from "./VideosSection.module.scss";
 
 const { Title } = Typography;
 
@@ -37,6 +37,7 @@ export default function VideosSection({ videos }: VideosSectionProps) {
           <Col key={video.id} xs={24} sm={12} md={8}>
             <Card
               hoverable
+              className={styles.videoCard}
               cover={
                 <div 
                   className={styles.thumbnailContainer}

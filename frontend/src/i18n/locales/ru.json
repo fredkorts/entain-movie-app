@@ -3,6 +3,8 @@
   "app_copyright": "Movie Entertainment",
   "search_placeholder": "Искать фильмы",
   "no_results": "Ничего не найдено",
+  "no_search_results": "Фильмы не найдены",
+  "no_search_results_hint": "Мы не смогли найти фильмы, соответствующие запросу \"{{query}}\". Попробуйте другой поисковый запрос.",
   "back": "Назад",
   "release": "Выпуск",
   "runtime": "Длительность",

@@ -3,6 +3,8 @@
   "app_copyright": "Movie Entertainment",
   "search_placeholder": "Otsi filme",
   "no_results": "Tulemusi ei leitud",
+  "no_search_results": "Filme ei leitud",
+  "no_search_results_hint": "Me ei leidnud ühtegi filmi, mis vastaks päringule \"{{query}}\". Proovi teist otsingusõna.",
   "back": "Tagasi",
   "release": "Väljalase",
   "runtime": "Kestus",

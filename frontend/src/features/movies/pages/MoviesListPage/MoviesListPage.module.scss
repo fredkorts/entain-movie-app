@@ -18,3 +18,12 @@
   justify-content: center;
   margin-top: 12px;
 }
+
+.emptyState {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: var(--spacing-xl);
+  text-align: center;
+}

@@ -10,7 +10,7 @@ import CastSection from "../../components/CastSection";
 import CrewSection from "../../components/CrewSection";
 import VideosSection from "../../components/VideosSection";
 import ReviewsSection from "../../components/ReviewsSection";
-import styles from "./MovieDetailPage.module.css";
+import styles from "./MovieDetailPage.module.scss";
 
 const { Title, Paragraph } = Typography;
 

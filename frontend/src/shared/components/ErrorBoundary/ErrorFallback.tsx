@@ -1,6 +1,6 @@
 import { Alert, Button } from "antd";
 import { useTranslation } from "react-i18next";
-import styles from "./ErrorFallback.module.css";
+import styles from "./ErrorFallback.module.scss";
 
 interface ErrorFallbackProps {
   error?: Error;

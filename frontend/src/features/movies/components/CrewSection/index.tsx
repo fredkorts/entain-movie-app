@@ -38,8 +38,9 @@ function CrewSection({ crew }: CrewSectionProps) {
           src={imageUrl}
           className={styles.avatar}
           onError={() => {
+            console.warn(`Failed to load avatar for ${member.name}:`, imageUrl);
             handleImageError(member.id);
-            return false; // Return false to show fallback
+            return true; // Return true to trigger Avatar's fallback icon
           }}
         />
       );
@@ -67,7 +68,6 @@ function CrewSection({ crew }: CrewSectionProps) {
               {renderCrewAvatar(member)}
               <div className={styles.memberInfo}>
                 <Text className={styles.memberName}>{member.name}</Text>
-                <br />
                 <Text className={styles.memberJob}>
                   {translateJobTitle(member.job, i18n.language)}
                 </Text>

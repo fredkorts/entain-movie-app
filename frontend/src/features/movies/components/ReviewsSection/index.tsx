@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { formatDate } from "../../../../lib/format";
 import type { Review } from "../../api/types";
 import { DEFAULT_LANGUAGE } from "../../../../lib/constants";
-import styles from "./ReviewsSection.module.css";
+import styles from "./ReviewsSection.module.scss";
 
 const { Title, Paragraph } = Typography;
 

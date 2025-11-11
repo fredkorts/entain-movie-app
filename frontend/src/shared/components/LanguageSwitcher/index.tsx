@@ -3,7 +3,7 @@ import type { MenuProps } from "antd";
 import i18n from "../../../i18n";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import styles from "./LanguageSwitcher.module.css";
+import styles from "./LanguageSwitcher.module.scss";
 
 const langs = [
   { key: "en", label: "EN" },

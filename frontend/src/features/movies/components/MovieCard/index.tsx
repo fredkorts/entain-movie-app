@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { memo, useMemo } from "react";
 import type { MovieSummary } from "../../api/types";
 import { getTmdbImageUrl, TMDB_IMAGE_SIZES, PLACEHOLDER_IMAGE_PATH } from "../../../../lib/constants";
-import styles from "./MovieCard.module.css";
+import styles from "./MovieCard.module.scss";
 
 const poster = (p: string | null, w: string = TMDB_IMAGE_SIZES.MEDIUM) => getTmdbImageUrl(p, w) || "";
 

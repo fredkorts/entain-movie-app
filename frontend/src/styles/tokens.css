@@ -39,7 +39,7 @@
   --card-padding: var(--spacing-lg);
   --card-margin: var(--spacing-xl);
   --hero-padding: var(--spacing-2xl);
-  --cast-card-height: 200px;
+  --cast-card-height: 180px;
   --video-thumbnail-height: 180px;
 
   /* Z-Index Scale */

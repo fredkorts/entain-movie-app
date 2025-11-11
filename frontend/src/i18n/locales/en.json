@@ -3,6 +3,8 @@
   "app_copyright": "Movie Entertainment",
   "search_placeholder": "Search movies",
   "no_results": "No results found",
+  "no_search_results": "No movies found",
+  "no_search_results_hint": "We couldn't find any movies matching \"{{query}}\". Try a different search term.",
   "back": "Back",
   "release": "Release",
   "runtime": "Runtime",
