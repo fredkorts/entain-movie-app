@@ -27,11 +27,28 @@ function authParams() {
 }
 
 export async function fetchMovies(opts: { page?: number; search?: string; lang?: string }) {
-  const page = opts.page ?? 1;
+  // Validate and parse page parameter
+  let page = 1;
+  if (opts.page !== undefined) {
+    const parsedPage = Number(opts.page);
+    if (!Number.isInteger(parsedPage) || parsedPage < 1) {
+      throw new RangeError(`Invalid page parameter: ${opts.page}. Page must be a positive integer.`);
+    }
+    page = parsedPage;
+  }
+  
   const search = (opts.search ?? "").trim();
   const language = mapLanguage(opts.lang);
+  
+  // We want 10 results per page, but TMDB gives us 20
+  const RESULTS_PER_PAGE = 10;
+  const TMDB_RESULTS_PER_PAGE = 20;
+  
+  // Calculate which TMDB page to fetch and the offset within that page
+  const tmdbPage = Math.ceil((page * RESULTS_PER_PAGE) / TMDB_RESULTS_PER_PAGE);
+  const offsetInTmdbPage = ((page - 1) * RESULTS_PER_PAGE) % TMDB_RESULTS_PER_PAGE;
 
-  const params: Record<string, string | number> = { ...authParams(), page, language };
+  const params: Record<string, string | number> = { ...authParams(), page: tmdbPage, language };
 
   let path = "/discover/movie";
   if (search) {
@@ -41,18 +58,27 @@ export async function fetchMovies(opts: { page?: number; search?: string; lang?:
   }
 
   const { data } = await TMDB.get(path, { params });
+  
+  // Slice the TMDB results to get our desired page size
+  const allResults = (data.results ?? []).map((m: any) => ({
+    id: m.id,
+    title: m.title,
+    poster_path: m.poster_path ?? null,
+    release_date: m.release_date ?? "",
+    vote_average: m.vote_average ?? 0
+  }));
+  
+  const results = allResults.slice(offsetInTmdbPage, offsetInTmdbPage + RESULTS_PER_PAGE);
+  
+  // Recalculate pagination based on our page size
+  const totalResults = data.total_results ?? 0;
+  const totalPages = Math.ceil(totalResults / RESULTS_PER_PAGE);
 
   return {
-    results: (data.results ?? []).map((m: any) => ({
-      id: m.id,
-      title: m.title,
-      poster_path: m.poster_path ?? null,
-      release_date: m.release_date ?? "",
-      vote_average: m.vote_average ?? 0
-    })),
-    page: data.page ?? page,
-    total_pages: data.total_pages ?? 1,
-    total_results: data.total_results ?? 0
+    results,
+    page,
+    total_pages: totalPages,
+    total_results: totalResults
   };
 }
 

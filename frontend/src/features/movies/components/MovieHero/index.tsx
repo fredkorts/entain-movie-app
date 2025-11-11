@@ -1,6 +1,7 @@
 import { Typography, Row, Col, Tag, Rate } from "antd";
 import { useTranslation } from "react-i18next";
 import { formatDate } from "../../../../lib/format";
+import { translateGenre } from "../../../../lib/genreTranslations";
 import type { MovieDetail } from "../../api/types";
 import { getTmdbImageUrl, TMDB_IMAGE_SIZES, PLACEHOLDER_IMAGE_PATH } from "../../../../lib/constants";
 import styles from "./MovieHero.module.css";
@@ -50,7 +51,7 @@ export default function MovieHero({ movie, titleId }: MovieHeroProps) {
                 <div className={styles.genres}>
                   {movie.genres?.map((genre: { id: number; name: string }) => (
                     <Tag key={genre.id} color="blue" className={styles.genre}>
-                      {genre.name}
+                      {translateGenre(genre.name, i18n.language)}
                     </Tag>
                   ))}
                 </div>
