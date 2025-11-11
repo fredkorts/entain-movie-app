@@ -1,0 +1,53 @@
+.section {
+  margin-bottom: var(--card-margin);
+}
+
+.title {
+  margin-bottom: var(--spacing-lg) !important;
+  color: var(--color-text-primary);
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md) var(--spacing-sm);
+}
+
+.crewMember {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: var(--spacing-sm);
+}
+
+@media (max-width: 767.99px) {
+  .crewMember {
+    min-width: 100%;
+  }
+}
+
+.memberInfo {
+  flex: 1;
+}
+
+.memberName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: var(--text-base);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+.memberJob {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: var(--leading-tight);
+  margin: 0;
+  margin-top: 2px;
+}
+
+.avatar {
+  flex-shrink: 0;
+}

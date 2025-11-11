@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Alert, Input, Pagination, Skeleton, Space } from "antd";
-import MovieCard from "../components/MovieCard";
+import MovieCard from "../../components/MovieCard";
 import styles from "./MoviesListPage.module.scss";
-import { useDebounce } from "../../../shared/hooks/useDebounce";
+import { useDebounce } from "../../../../shared/hooks/useDebounce";
 import { useTranslation } from "react-i18next";
-import { getErrorMessage } from "../../../lib/errorUtils";
-import { useGetMoviesQuery } from "../../../store/api/moviesApi";
+import { getErrorMessage } from "../../../../lib/errorUtils";
+import { useGetMoviesQuery } from "../../../../store/api/moviesApi";
+import { MOVIES_PAGE_SIZE, SEARCH_DEBOUNCE_DELAY } from "../../../../lib/constants";
 
-const PAGE_SIZE = 10; // Custom page size for better UX
-const SKELETONS = Array.from({ length: PAGE_SIZE });
+const SKELETONS = Array.from({ length: MOVIES_PAGE_SIZE });
 
 export default function MoviesListPage() {
   const [q, setQ] = useState("");
   const [page, setPage] = useState(1);
   const { t, i18n } = useTranslation();
 
-  const debouncedQ = useDebounce(q, 350);
+  const debouncedQ = useDebounce(q, SEARCH_DEBOUNCE_DELAY);
 
   const { data, isLoading, error } = useGetMoviesQuery({
     page,
@@ -64,11 +64,11 @@ export default function MoviesListPage() {
         )}
       </section>
 
-      {!isLoading && total > PAGE_SIZE && (
+      {!isLoading && total > MOVIES_PAGE_SIZE && (
         <div className={styles.pagination}>
           <Pagination
             current={data?.page ?? page}
-            pageSize={PAGE_SIZE}
+            pageSize={MOVIES_PAGE_SIZE}
             total={total}
             onChange={setPage}
             showSizeChanger={false}

@@ -1,0 +1,289 @@
+/* =============================================================================
+   CSS UTILITIES
+   =============================================================================
+   Common utility classes that can be used across components to avoid
+   repetition and maintain consistency. These are pure CSS classes that
+   can be imported into any CSS module.
+   ============================================================================= */
+
+/* =============================================================================
+   LAYOUT UTILITIES
+   ============================================================================= */
+
+/* Standard section layout */
+.u-section-layout {
+  margin-bottom: var(--card-margin);
+}
+
+/* Standard section title */
+.u-section-title {
+  margin-bottom: var(--spacing-lg) !important;
+  color: var(--color-text-primary);
+}
+
+/* Flex utilities */
+.u-flex {
+  display: flex;
+}
+
+.u-flex-wrap {
+  flex-wrap: wrap;
+}
+
+.u-flex-column {
+  flex-direction: column;
+}
+
+.u-flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.u-flex-between {
+  justify-content: space-between;
+}
+
+.u-flex-gap-sm {
+  gap: var(--spacing-sm);
+}
+
+.u-flex-gap-md {
+  gap: var(--spacing-md);
+}
+
+.u-flex-gap-lg {
+  gap: var(--spacing-lg);
+}
+
+/* Grid utilities */
+.u-grid {
+  display: grid;
+}
+
+.u-grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.u-grid-auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* =============================================================================
+   SPACING UTILITIES
+   ============================================================================= */
+
+.u-margin-bottom-sm { margin-bottom: var(--spacing-sm) !important; }
+.u-margin-bottom-md { margin-bottom: var(--spacing-md) !important; }
+.u-margin-bottom-lg { margin-bottom: var(--spacing-lg) !important; }
+.u-margin-bottom-xl { margin-bottom: var(--spacing-xl) !important; }
+
+.u-padding-sm { padding: var(--spacing-sm) !important; }
+.u-padding-md { padding: var(--spacing-md) !important; }
+.u-padding-lg { padding: var(--spacing-lg) !important; }
+.u-padding-xl { padding: var(--spacing-xl) !important; }
+
+/* =============================================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================================= */
+
+/* Text truncation */
+.u-text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.u-text-truncate-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.u-text-truncate-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Common text styles */
+.u-member-name {
+  font-size: var(--text-base) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--color-text-primary) !important;
+  line-height: var(--leading-tight) !important;
+  margin-bottom: var(--spacing-xs) !important;
+}
+
+.u-member-role {
+  font-size: var(--text-sm) !important;
+  color: var(--color-text-secondary) !important;
+  line-height: var(--leading-tight) !important;
+  margin: 0 !important;
+}
+
+.u-hero-text {
+  color: var(--hero-text-color) !important;
+  text-shadow: var(--hero-text-shadow) !important;
+}
+
+/* =============================================================================
+   IMAGE UTILITIES
+   ============================================================================= */
+
+.u-image-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.u-image-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.u-aspect-square {
+  aspect-ratio: 1/1;
+}
+
+.u-aspect-video {
+  aspect-ratio: 16/9;
+}
+
+.u-aspect-poster {
+  aspect-ratio: 2/3;
+}
+
+.u-hover-zoom {
+  transition: transform 0.3s ease;
+}
+
+.u-hover-zoom:hover {
+  transform: scale(1.05);
+}
+
+.u-image-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+/* =============================================================================
+   INTERACTION UTILITIES
+   ============================================================================= */
+
+.u-interactive {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.u-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.u-focus-outline:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* =============================================================================
+   CARD UTILITIES
+   ============================================================================= */
+
+.u-card-container {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--card-padding);
+  transition: all 0.3s ease;
+}
+
+.u-card-container:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* =============================================================================
+   RESPONSIVE UTILITIES
+   ============================================================================= */
+
+/* Show/hide at different breakpoints */
+@media (max-width: 575.99px) {
+  .u-hide-mobile { display: none !important; }
+}
+
+@media (min-width: 576px) {
+  .u-show-mobile { display: none !important; }
+}
+
+@media (max-width: 767.99px) {
+  .u-hide-tablet-down { display: none !important; }
+}
+
+@media (min-width: 768px) {
+  .u-hide-desktop-up { display: none !important; }
+}
+
+/* Responsive text alignment */
+.u-text-center-mobile {
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .u-text-center-mobile {
+    text-align: left;
+  }
+}
+
+/* =============================================================================
+   LOADING/STATE UTILITIES
+   ============================================================================= */
+
+.u-loading-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary) 25%,
+    var(--color-bg-primary) 50%,
+    var(--color-bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.u-skeleton {
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+/* =============================================================================
+   ACCESSIBILITY UTILITIES
+   ============================================================================= */
+
+.u-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}

@@ -1,0 +1,46 @@
+.section {
+  margin-bottom: var(--card-margin);
+}
+
+.title {
+  margin-bottom: var(--spacing-lg) !important;
+  color: var(--color-text-primary);
+}
+
+.reviewsList {
+  background: transparent !important;
+}
+
+.reviewItem {
+  padding: var(--spacing-lg) 0 !important;
+  border-bottom: 1px solid var(--color-border-secondary) !important;
+}
+
+.reviewItem:last-child {
+  border-bottom: none !important;
+}
+
+.reviewMeta {
+  margin-bottom: var(--spacing-md) !important;
+}
+
+.reviewAuthor {
+  color: var(--color-text-primary) !important;
+  font-weight: 600 !important;
+}
+
+.reviewDate {
+  color: var(--color-text-secondary) !important;
+  font-size: var(--text-sm) !important;
+}
+
+.reviewContent {
+  margin-top: var(--spacing-sm) !important;
+  color: var(--color-text-primary) !important;
+  font-size: var(--text-base) !important;
+  line-height: var(--leading-relaxed) !important;
+}
+
+.reviewAvatar {
+  background-color: var(--color-primary) !important;
+}

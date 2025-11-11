@@ -1,0 +1,179 @@
+/* Design Tokens - Aligned with Ant Design */
+
+:root {
+  /* Spacing Scale */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 40px;
+  --spacing-3xl: 48px;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Shadows - Light Theme */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Typography Scale */
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 18px;
+  --text-2xl: 20px;
+  --text-3xl: 24px;
+
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+
+  /* Component Specific */
+  --card-padding: var(--spacing-lg);
+  --card-margin: var(--spacing-xl);
+  --hero-padding: var(--spacing-2xl);
+  --cast-card-height: 200px;
+  --video-thumbnail-height: 180px;
+
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal: 1040;
+  --z-popover: 1050;
+  --z-tooltip: 1060;
+}
+
+/* Light Theme Colors (Ant Design Default) */
+[data-theme="light"], :root {
+  /* Primary Colors */
+  --color-primary: #1677ff;
+  --color-primary-hover: #4096ff;
+  --color-primary-active: #0958d9;
+
+  /* Success/Error/Warning */
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-error: #ff4d4f;
+  --color-info: #1677ff;
+
+  /* Neutral Colors */
+  --color-text-primary: rgba(0, 0, 0, 0.88);
+  --color-text-secondary: rgba(0, 0, 0, 0.65);
+  --color-text-tertiary: rgba(0, 0, 0, 0.45);
+  --color-text-disabled: rgba(0, 0, 0, 0.25);
+
+  /* Background Colors */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #fafafa;
+  --color-bg-tertiary: #f5f5f5;
+  --color-bg-disabled: rgba(0, 0, 0, 0.04);
+
+  /* Border Colors */
+  --color-border-primary: #d9d9d9;
+  --color-border-secondary: #f0f0f0;
+
+  /* Overlay Colors */
+  --color-overlay-light: rgba(255, 255, 255, 0.8);
+  --color-overlay-dark: rgba(0, 0, 0, 0.8);
+  --color-overlay-gradient: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%);
+
+  /* Component Specific - Light Theme */
+  --hero-text-color: #ffffff;
+  --hero-text-secondary: rgba(255, 255, 255, 0.8);
+  --hero-text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  --cast-card-bg: #f5f5f5;
+  --cast-fallback-bg: #fafafa;
+  --cast-avatar-bg: #d9d9d9;
+}
+
+/* Dark Theme Colors (Ant Design Dark) */
+[data-theme="dark"] {
+  /* Primary Colors (same as light) */
+  --color-primary: #1677ff;
+  --color-primary-hover: #4096ff;
+  --color-primary-active: #0958d9;
+
+  /* Success/Error/Warning (adjusted for dark) */
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-error: #ff4d4f;
+  --color-info: #1677ff;
+
+  /* Neutral Colors - Dark */
+  --color-text-primary: rgba(255, 255, 255, 0.85);
+  --color-text-secondary: rgba(255, 255, 255, 0.65);
+  --color-text-tertiary: rgba(255, 255, 255, 0.45);
+  --color-text-disabled: rgba(255, 255, 255, 0.25);
+
+  /* Background Colors - Dark */
+  --color-bg-primary: #141414;
+  --color-bg-secondary: #1f1f1f;
+  --color-bg-tertiary: #262626;
+  --color-bg-disabled: rgba(255, 255, 255, 0.08);
+
+  /* Border Colors - Dark */
+  --color-border-primary: #424242;
+  --color-border-secondary: #303030;
+
+  /* Shadows - Dark Theme */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+  /* Overlay Colors - Dark */
+  --color-overlay-light: rgba(0, 0, 0, 0.6);
+  --color-overlay-dark: rgba(255, 255, 255, 0.1);
+
+  /* Component Specific - Dark Theme */
+  --hero-text-color: #ffffff;
+  --hero-text-secondary: rgba(255, 255, 255, 0.8);
+  --hero-text-shadow: 1px 1px 2px rgba(0,0,0,0.9);
+  --cast-card-bg: #262626;
+  --cast-fallback-bg: #1f1f1f;
+  --cast-avatar-bg: #424242;
+}
+
+/* Utility Classes for Responsive Design (aligned with Ant Design) */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 540px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 720px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1520px;
+  }
+}

@@ -1,0 +1,274 @@
+/* =============================================================================
+   CSS MIXINS AND UTILITIES
+   ============================================================================= 
+   This SCSS file provides reusable mixins and utilities that can be imported
+   into our CSS module files to reduce code duplication and maintain consistency.
+   ============================================================================= */
+
+/* =============================================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================================= */
+
+// Consistent breakpoint mixins
+@mixin mobile-only {
+  @media (max-width: 575.99px) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: 576px) {
+    @content;
+  }
+}
+
+@mixin tablet-only {
+  @media (min-width: 576px) and (max-width: 767.99px) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop-only {
+  @media (min-width: 768px) and (max-width: 991.99px) {
+    @content;
+  }
+}
+
+@mixin large-up {
+  @media (min-width: 992px) {
+    @content;
+  }
+}
+
+/* =============================================================================
+   LAYOUT MIXINS
+   ============================================================================= */
+
+// Standard section layout
+@mixin section-layout {
+  margin-bottom: var(--card-margin);
+}
+
+// Standard section title
+@mixin section-title {
+  margin-bottom: var(--spacing-lg) !important;
+  color: var(--color-text-primary);
+}
+
+// Flex grid with consistent gaps
+@mixin flex-grid($gap: var(--spacing-md), $wrap: wrap) {
+  display: flex;
+  flex-wrap: $wrap;
+  gap: $gap;
+}
+
+// Responsive grid with automatic sizing
+@mixin responsive-grid($min-width: 200px, $max-width: none) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
+  gap: var(--spacing-md);
+  
+  @if $max-width {
+    & > * {
+      max-width: $max-width;
+    }
+  }
+}
+
+// Card container with hover effects
+@mixin card-container {
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--card-padding);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+/* =============================================================================
+   IMAGE MIXINS
+   ============================================================================= */
+
+// Standard image with hover zoom
+@mixin hover-zoom-image($scale: 1.05) {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale($scale);
+  }
+}
+
+// Image with aspect ratio and object fit
+@mixin aspect-image($ratio: "2/3", $fit: cover) {
+  width: 100%;
+  aspect-ratio: #{$ratio};
+  object-fit: $fit;
+}
+
+// Fallback container for missing images
+@mixin image-fallback-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+/* =============================================================================
+   TYPOGRAPHY MIXINS
+   ============================================================================= */
+
+// Truncate text with ellipsis
+@mixin text-truncate($lines: 1) {
+  overflow: hidden;
+  
+  @if $lines == 1 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: #{$lines};
+    line-clamp: #{$lines};
+    -webkit-box-orient: vertical;
+  }
+}
+
+// Standard member name styling
+@mixin member-name {
+  font-size: var(--text-base) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--color-text-primary) !important;
+  line-height: var(--leading-tight) !important;
+  margin-bottom: var(--spacing-xs) !important;
+  @include text-truncate(2);
+}
+
+// Standard member role/job styling
+@mixin member-role {
+  font-size: var(--text-sm) !important;
+  color: var(--color-text-secondary) !important;
+  line-height: var(--leading-tight) !important;
+  margin: 0;
+}
+
+// Hero text with shadow
+@mixin hero-text($size: var(--text-lg)) {
+  color: var(--hero-text-color) !important;
+  text-shadow: var(--hero-text-shadow) !important;
+  font-size: $size !important;
+}
+
+/* =============================================================================
+   INTERACTION MIXINS
+   ============================================================================= */
+
+// Standard focus outline
+@mixin focus-outline($color: var(--color-primary)) {
+  &:focus {
+    outline: 2px solid $color;
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+// Hover lift effect
+@mixin hover-lift($distance: 4px) {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-#{$distance});
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+// Loading shimmer effect
+@mixin shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--color-bg-secondary) 25%,
+    var(--color-bg-primary) 50%,
+    var(--color-bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+/* =============================================================================
+   THEME MIXINS
+   ============================================================================= */
+
+// Apply styles for dark theme only
+@mixin dark-theme {
+  :global([data-theme="dark"]) & {
+    @content;
+  }
+}
+
+// Apply styles for light theme only  
+@mixin light-theme {
+  :global([data-theme="light"]) & {
+    @content;
+  }
+}
+
+/* =============================================================================
+   UTILITY MIXINS
+   ============================================================================= */
+
+// Visually hidden (accessible but invisible)
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+// Center content absolutely
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Reset button styles
+@mixin button-reset {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+// Consistent scroll behavior
+@mixin smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}

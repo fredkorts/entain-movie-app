@@ -1,0 +1,76 @@
+/* =============================================================================
+   CastSection Component Styles - Refactored with Mixins
+   ============================================================================= */
+
+@use "../../../../styles/mixins" as m;
+
+.section {
+  @include m.section-layout;
+}
+
+.title {
+  @include m.section-title;
+}
+
+.grid {
+  @include m.flex-grid(var(--spacing-md));
+}
+
+.castCard {
+  flex: 1;
+  min-width: 150px;
+  max-width: 200px;
+
+  @include m.mobile-only {
+    min-width: calc(50% - var(--spacing-sm));
+    max-width: calc(50% - var(--spacing-sm));
+  }
+
+  @include m.tablet-only {
+    min-width: calc(33.333% - var(--spacing-md));
+    max-width: calc(33.333% - var(--spacing-md));
+  }
+
+  @include m.desktop-only {
+    min-width: calc(25% - var(--spacing-md));
+    max-width: calc(25% - var(--spacing-md));
+  }
+
+  @include m.large-up {
+    min-width: calc(20% - var(--spacing-md));
+    max-width: calc(20% - var(--spacing-md));
+  }
+}
+
+.imageContainer {
+  height: var(--cast-card-height);
+  overflow: hidden;
+  background-color: var(--cast-card-bg);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  @include m.image-fallback-container;
+}
+
+.castImage {
+  @include m.aspect-image("1/1");
+  @include m.hover-zoom-image(1.05);
+}
+
+.fallbackContainer {
+  @include m.image-fallback-container;
+}
+
+.fallbackAvatar {
+  background-color: var(--cast-avatar-bg) !important;
+}
+
+.cardMeta {
+  padding: var(--spacing-sm);
+}
+
+.memberName {
+  @include m.member-name;
+}
+
+.memberRole {
+  @include m.member-role;
+}

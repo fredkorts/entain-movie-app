@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom"
 import AppLayout from "./shared/layouts/AppLayout.tsx"
-import MoviesListPage from "./features/movies/pages/MoviesListPage.tsx";
-import MovieDetailPage from "./features/movies/pages/MovieDetailPage.tsx";
+import MoviesListPage from "./features/movies/pages/MoviesListPage";
+import MovieDetailPage from "./features/movies/pages/MovieDetailPage";
 
 const router = createBrowserRouter([
     {

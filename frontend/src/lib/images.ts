@@ -1,2 +1,4 @@
-export const tmdbImg = (path?: string | null, size: string = 'w185') =>
-  path ? `https://image.tmdb.org/t/p/${size}${path}` : null;
+import { getTmdbImageUrl, TMDB_IMAGE_SIZES } from './constants';
+
+export const tmdbImg = (path?: string | null, size: string = TMDB_IMAGE_SIZES.SMALL) =>
+  getTmdbImageUrl(path, size);
