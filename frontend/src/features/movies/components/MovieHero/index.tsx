@@ -4,7 +4,7 @@ import { formatDate } from "../../../../lib/format";
 import { translateGenre } from "../../../../lib/genreTranslations";
 import type { MovieDetail } from "../../api/types";
 import { getTmdbImageUrl, TMDB_IMAGE_SIZES, PLACEHOLDER_IMAGE_PATH } from "../../../../lib/constants";
-import styles from "./MovieHero.module.css";
+import styles from "./MovieHero.module.scss";
 
 const { Title, Text } = Typography;
 

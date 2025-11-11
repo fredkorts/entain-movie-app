@@ -29,7 +29,7 @@
 
 .overviewTitle {
   margin-bottom: var(--spacing-md) !important;
-  color: var(--color-text-primary);
+  color: var(--color-text-primary) !important;
 }
 
 .overviewText {

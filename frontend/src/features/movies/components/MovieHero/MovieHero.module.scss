@@ -1,3 +1,9 @@
+/* =============================================================================
+   MovieHero Component Styles - SCSS with Mixins
+   ============================================================================= */
+
+@use "../../../../styles/mixins" as m;
+
 .heroSection {
   background-size: cover;
   background-position: center;
@@ -25,10 +31,8 @@
   display: flex;
   justify-content: center;
   margin-bottom: var(--spacing-lg);
-}
 
-@media (min-width: 768px) {
-  .posterContainer {
+  @include m.desktop-up {
     margin-bottom: 0;
   }
 }
@@ -39,49 +43,40 @@
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   transition: transform 0.3s ease;
-}
 
-@media (min-width: 768px) {
-  .poster {
+  @include m.desktop-up {
     max-width: 300px;
   }
-}
 
-.poster:hover {
-  transform: scale(1.02);
+  &:hover {
+    transform: scale(1.02);
+  }
 }
 
 .movieInfo {
   text-align: center;
-}
 
-@media (min-width: 768px) {
-  .movieInfo {
+  @include m.desktop-up {
     text-align: left;
   }
 }
 
 .title {
-  color: var(--hero-text-color) !important;
+  @include m.hero-text(var(--text-3xl));
   margin-bottom: var(--spacing-sm) !important;
-  text-shadow: var(--hero-text-shadow);
-  font-size: var(--text-3xl) !important;
   line-height: var(--leading-tight) !important;
-}
 
-@media (min-width: 768px) {
-  .title {
+  @include m.desktop-up {
     font-size: 2.5rem !important;
   }
 }
 
 .tagline {
-  font-size: var(--text-lg) !important;
+  @include m.hero-text(var(--text-lg));
   font-style: italic !important;
   color: var(--hero-text-secondary) !important;
   display: block;
   margin-bottom: var(--spacing-md);
-  text-shadow: var(--hero-text-shadow);
 }
 
 .genres {
@@ -90,10 +85,8 @@
   flex-wrap: wrap;
   gap: var(--spacing-xs);
   justify-content: center;
-}
 
-@media (min-width: 768px) {
-  .genres {
+  @include m.desktop-up {
     justify-content: flex-start;
   }
 }
@@ -108,18 +101,14 @@
   flex-direction: column;
   gap: var(--spacing-md);
   text-align: center;
-}
 
-@media (min-width: 576px) {
-  .movieDetails {
+  @include m.tablet-up {
     flex-direction: row;
     justify-content: center;
     gap: var(--spacing-xl);
   }
-}
 
-@media (min-width: 768px) {
-  .movieDetails {
+  @include m.desktop-up {
     justify-content: flex-start;
   }
 }
@@ -128,26 +117,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
 
-@media (min-width: 768px) {
-  .detailItem {
+  @include m.desktop-up {
     align-items: flex-start;
   }
 }
 
 .detailLabel {
-  color: var(--hero-text-color) !important;
-  text-shadow: var(--hero-text-shadow) !important;
+  @include m.hero-text(var(--text-base));
   font-weight: 600 !important;
-  font-size: var(--text-base) !important;
   margin-bottom: var(--spacing-xs) !important;
 }
 
 .detailValue {
+  @include m.hero-text(var(--text-base));
   color: var(--hero-text-secondary) !important;
-  font-size: var(--text-base) !important;
-  text-shadow: var(--hero-text-shadow) !important;
 }
 
 .ratingContainer {
@@ -155,10 +139,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xs);
-}
 
-@media (min-width: 768px) {
-  .ratingContainer {
+  @include m.desktop-up {
     align-items: flex-start;
   }
 }
@@ -168,8 +150,8 @@
 }
 
 .ratingValue {
+  @include m.hero-text(var(--text-base));
   color: var(--hero-text-secondary) !important;
   margin-left: var(--spacing-sm) !important;
-  text-shadow: var(--hero-text-shadow) !important;
   font-weight: 600 !important;
 }

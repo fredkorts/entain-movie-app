@@ -53,12 +53,13 @@
 // Standard section layout
 @mixin section-layout {
   margin-bottom: var(--card-margin);
+  background-color: transparent;
 }
 
 // Standard section title
 @mixin section-title {
   margin-bottom: var(--spacing-lg) !important;
-  color: var(--color-text-primary);
+  color: var(--color-text-primary) !important;
 }
 
 // Flex grid with consistent gaps

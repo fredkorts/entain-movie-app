@@ -1,8 +1,8 @@
-.wrap { min-height: 100vh; }
-.header { display: flex; align-items: center; }
+.wrap { min-height: 100vh; background: var(--color-bg-primary) !important; }
+.header { display: flex; align-items: center; background: transparent !important; color: var(--color-text-primary) !important; border-bottom: 1px solid var(--color-border-primary); }
 .title { color: inherit !important; margin: 0 !important; }
 .content { padding: 24px; max-width: 1200px; margin: 0 auto; }
-.footer { text-align: center; }
+.footer { text-align: center; background: transparent !important; color: var(--color-text-secondary) !important; border-top: 1px solid var(--color-border-primary); }
 
 .headerActions {
   margin-left: auto;

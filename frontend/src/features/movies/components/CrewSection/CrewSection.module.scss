@@ -1,0 +1,47 @@
+/* =============================================================================
+   CrewSection Component Styles - SCSS with Mixins
+   ============================================================================= */
+
+@use "../../../../styles/mixins" as m;
+
+.section {
+  @include m.section-layout;
+}
+
+.title {
+  @include m.section-title;
+}
+
+.grid {
+  @include m.flex-grid(var(--spacing-md));
+}
+
+.crewMember {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: var(--spacing-sm);
+
+  @include m.mobile-only {
+    min-width: 100%;
+  }
+}
+
+.memberInfo {
+  flex: 1;
+}
+
+.memberName {
+  @include m.member-name;
+}
+
+.memberJob {
+  @include m.member-role;
+  margin-top: 2px;
+}
+
+.avatar {
+  flex-shrink: 0;
+}

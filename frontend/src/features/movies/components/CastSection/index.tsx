@@ -55,7 +55,7 @@ function CastSection({ cast }: CastSectionProps) {
       <Title level={3} className={styles.title}>{t("cast")}</Title>
       <Row gutter={[16, 16]}>
         {cast.slice(0, 8).map((member) => (
-          <Col key={member.id} xs={12} sm={8} md={6} lg={4}>
+          <Col key={member.id} xs={12} sm={8} md={6} lg={4} className={styles.castCol}>
             <Card
               hoverable
               cover={
@@ -64,8 +64,10 @@ function CastSection({ cast }: CastSectionProps) {
                 </div>
               }
               size="small"
+              className={styles.castCard}
             >
               <Card.Meta
+                className={styles.cardMeta}
                 title={<Text className={styles.memberName}>{member.name}</Text>}
                 description={<Text className={styles.memberRole}>{member.character}</Text>}
               />

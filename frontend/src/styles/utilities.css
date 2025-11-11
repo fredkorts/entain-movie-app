@@ -18,7 +18,7 @@
 /* Standard section title */
 .u-section-title {
   margin-bottom: var(--spacing-lg) !important;
-  color: var(--color-text-primary);
+  color: var(--color-text-primary) !important;
 }
 
 /* Flex utilities */
