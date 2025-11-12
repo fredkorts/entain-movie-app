@@ -17,8 +17,8 @@
 
 /* Standard section title */
 .u-section-title {
-  margin-bottom: var(--spacing-lg) !important;
-  color: var(--color-text-primary) !important;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-primary);
 }
 
 /* Flex utilities */
@@ -61,12 +61,12 @@
 }
 
 .u-grid-auto-fit {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--spacing-xl) * 6.25), 1fr));
   gap: var(--spacing-md);
 }
 
 .u-grid-auto-fill {
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(calc(var(--spacing-xl) * 6.25), 1fr));
   gap: var(--spacing-md);
 }
 
@@ -74,15 +74,15 @@
    SPACING UTILITIES
    ============================================================================= */
 
-.u-margin-bottom-sm { margin-bottom: var(--spacing-sm) !important; }
-.u-margin-bottom-md { margin-bottom: var(--spacing-md) !important; }
-.u-margin-bottom-lg { margin-bottom: var(--spacing-lg) !important; }
-.u-margin-bottom-xl { margin-bottom: var(--spacing-xl) !important; }
+.u-margin-bottom-sm { margin-bottom: var(--spacing-sm); }
+.u-margin-bottom-md { margin-bottom: var(--spacing-md); }
+.u-margin-bottom-lg { margin-bottom: var(--spacing-lg); }
+.u-margin-bottom-xl { margin-bottom: var(--spacing-xl); }
 
-.u-padding-sm { padding: var(--spacing-sm) !important; }
-.u-padding-md { padding: var(--spacing-md) !important; }
-.u-padding-lg { padding: var(--spacing-lg) !important; }
-.u-padding-xl { padding: var(--spacing-xl) !important; }
+.u-padding-sm { padding: var(--spacing-sm); }
+.u-padding-md { padding: var(--spacing-md); }
+.u-padding-lg { padding: var(--spacing-lg); }
+.u-padding-xl { padding: var(--spacing-xl); }
 
 /* =============================================================================
    TYPOGRAPHY UTILITIES
@@ -113,23 +113,23 @@
 
 /* Common text styles */
 .u-member-name {
-  font-size: var(--text-base) !important;
-  font-weight: var(--font-weight-semibold) !important;
-  color: var(--color-text-primary) !important;
-  line-height: var(--leading-tight) !important;
-  margin-bottom: var(--spacing-xs) !important;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--spacing-xs);
 }
 
 .u-member-role {
-  font-size: var(--text-sm) !important;
-  color: var(--color-text-secondary) !important;
-  line-height: var(--leading-tight) !important;
-  margin: 0 !important;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-tight);
+  margin: 0;
 }
 
 .u-hero-text {
-  color: var(--hero-text-color) !important;
-  text-shadow: var(--hero-text-shadow) !important;
+  color: var(--hero-text-color);
+  text-shadow: var(--hero-text-shadow);
 }
 
 /* =============================================================================
@@ -191,7 +191,7 @@
 }
 
 .u-focus-outline:focus {
-  outline: 2px solid var(--color-primary);
+  outline: var(--border-width-focus) solid var(--color-primary);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
 }
@@ -219,19 +219,19 @@
 
 /* Show/hide at different breakpoints */
 @media (max-width: 575.99px) {
-  .u-hide-mobile { display: none !important; }
+  .u-hide-mobile { display: none; }
 }
 
 @media (min-width: 576px) {
-  .u-show-mobile { display: none !important; }
+  .u-show-mobile { display: none; }
 }
 
 @media (max-width: 767.99px) {
-  .u-hide-tablet-down { display: none !important; }
+  .u-hide-tablet-down { display: none; }
 }
 
 @media (min-width: 768px) {
-  .u-hide-desktop-up { display: none !important; }
+  .u-hide-desktop-up { display: none; }
 }
 
 /* Responsive text alignment */
@@ -277,13 +277,13 @@
    ============================================================================= */
 
 .u-sr-only {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

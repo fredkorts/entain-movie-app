@@ -16,6 +16,10 @@
   --radius-lg: 12px;
   --radius-xl: 16px;
 
+  /* Border Widths */
+  --border-width-thin: 1px;
+  --border-width-focus: 2px;
+
   /* Shadows - Light Theme */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -30,17 +34,42 @@
   --text-2xl: 20px;
   --text-3xl: 24px;
 
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
   /* Line Heights */
   --leading-tight: 1.25;
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
 
+  /* Layout */
+  --layout-content-max-width: calc(var(--spacing-xl) * 37.5);
+  --layout-content-padding: var(--spacing-lg);
+
   /* Component Specific */
   --card-padding: var(--spacing-lg);
   --card-margin: var(--spacing-xl);
   --hero-padding: var(--spacing-2xl);
-  --cast-card-height: 180px;
-  --video-thumbnail-height: 180px;
+  --hero-min-height: calc(var(--spacing-xl) * 10);
+  --hero-poster-max-width: calc(var(--spacing-xl) * 8);
+  --hero-poster-max-width-desktop: calc(var(--spacing-xl) * 9.5);
+  --movie-card-min-width: calc(var(--spacing-lg) * 8);
+  --movie-pagination-margin: var(--spacing-md);
+  --empty-state-min-height: calc(var(--spacing-3xl) * 8);
+  --crew-card-min-width: calc(var(--spacing-xl) * 7.5);
+  --crew-job-spacing: calc(var(--spacing-xs) / 2);
+  --cast-card-min-height: calc(var(--spacing-xl) * 8.5);
+  --cast-card-min-height-mobile: calc(var(--spacing-xl) * 8);
+  --cast-card-min-height-tablet: calc(var(--spacing-xl) * 8.25);
+  --cast-card-height: calc(var(--spacing-xl) * 5.625);
+  --video-card-min-width: calc(var(--spacing-xl) * 8.75);
+  --video-card-max-width: calc(var(--spacing-xl) * 12.5);
+  --video-card-tablet-width: calc(50% - var(--spacing-md));
+  --video-thumbnail-height: calc(var(--spacing-xl) * 5.625);
+  --hero-title-desktop-size: clamp(var(--text-3xl), 4vw, 2.5rem);
 
   /* Z-Index Scale */
   --z-dropdown: 1000;

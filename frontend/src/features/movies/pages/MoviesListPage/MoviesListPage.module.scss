@@ -1,29 +1,33 @@
+@use "../../../../styles/mixins" as m;
+
 .wrap {
   display: grid;
-  gap: 16px;
+  gap: var(--spacing-md);
 }
+
 .toolbar {
-  margin-bottom: 8px;
+  margin-bottom: var(--spacing-sm);
 }
+
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
+  @include m.responsive-grid(var(--movie-card-min-width));
 }
+
 .card {
   display: block;
 }
+
 .pagination {
-  display: flex;
+  @include m.flex-grid(var(--spacing-xs), nowrap);
   justify-content: center;
-  margin-top: 12px;
+  margin-top: var(--movie-pagination-margin);
 }
 
 .emptyState {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 400px;
+  min-height: var(--empty-state-min-height);
   padding: var(--spacing-xl);
   text-align: center;
 }

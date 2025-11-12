@@ -2,6 +2,8 @@
    MovieCard Component Styles
    ============================================================================= */
 
+@use "../../../../styles/mixins" as m;
+
 .card {
   /* Ensure the card takes full height for consistent layout */
   height: 100%;
@@ -14,11 +16,7 @@
   aspect-ratio: 2/3;
   object-fit: cover;
   border-radius: var(--radius-sm);
-  transition: transform 0.2s ease-in-out;
-}
-
-.posterImage:hover {
-  transform: scale(1.05);
+  @include m.hover-zoom-image(1.05);
 }
 
 .content {
@@ -49,7 +47,7 @@
   opacity: 0.7;
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-regular);
 }
 
 .link {
@@ -64,21 +62,19 @@
 }
 
 .link:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  @include m.focus-outline();
 }
 
 /* Responsive adjustments */
-@media (max-width: 767.99px) {
+@include m.mobile-only {
   .content {
     padding: var(--spacing-xs) 0;
   }
-  
+
   .title {
     font-size: var(--text-sm);
   }
-  
+
   .year {
     font-size: var(--text-xs);
   }
@@ -86,15 +82,15 @@
 
 /* Theme support - Force override Ant Design's Card styles */
 .card {
-  background-color: var(--color-bg-secondary) !important;
-  border-color: var(--color-border-secondary) !important;
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border-secondary);
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .title {
-  color: var(--color-text-primary) !important;
+  color: var(--color-text-primary);
 }
 
 .year {
-  color: var(--color-text-secondary) !important;
+  color: var(--color-text-secondary);
 }

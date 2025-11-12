@@ -29,147 +29,147 @@ body {
 .ant-input,
 .ant-input-affix-wrapper,
 .ant-input-search .ant-input-group .ant-input-affix-wrapper {
-  background-color: var(--color-bg-secondary) !important;
-  color: var(--color-text-primary) !important;
-  border-color: var(--color-border-secondary) !important;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-secondary);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .ant-input::placeholder,
 .ant-input-affix-wrapper input::placeholder {
-  color: var(--color-text-tertiary) !important;
+  color: var(--color-text-tertiary);
 }
 
 .ant-input:hover,
 .ant-input-affix-wrapper:hover {
-  border-color: var(--color-primary) !important;
+  border-color: var(--color-primary);
 }
 
 .ant-input:focus,
 .ant-input-focused,
 .ant-input-affix-wrapper:focus,
 .ant-input-affix-wrapper-focused {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 2px var(--color-primary-bg) !important;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-bg);
 }
 
 /* Search button in Input.Search */
 .ant-input-search-button {
-  background-color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
-  transition: background-color 0.3s ease, border-color 0.3s ease !important;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .ant-input-search-button:hover {
-  background-color: var(--color-primary-hover) !important;
-  border-color: var(--color-primary-hover) !important;
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 /* Force Ant Design Button components to respond to theme changes instantly */
 .ant-btn {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Default button (Back button, etc.) */
 .ant-btn-default {
-  background-color: var(--color-bg-secondary) !important;
-  color: var(--color-text-primary) !important;
-  border-color: var(--color-border-secondary) !important;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-secondary);
 }
 
 .ant-btn-default:hover {
-  background-color: var(--color-bg-elevated) !important;
-  color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
+  background-color: var(--color-bg-elevated);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .ant-btn-default:active {
-  background-color: var(--color-bg-elevated) !important;
-  color: var(--color-primary-active) !important;
-  border-color: var(--color-primary-active) !important;
+  background-color: var(--color-bg-elevated);
+  color: var(--color-primary-active);
+  border-color: var(--color-primary-active);
 }
 
 /* Primary button */
 .ant-btn-primary {
-  background-color: var(--color-primary) !important;
-  color: #ffffff !important;
-  border-color: var(--color-primary) !important;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
 }
 
 .ant-btn-primary:hover {
-  background-color: var(--color-primary-hover) !important;
-  border-color: var(--color-primary-hover) !important;
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .ant-btn-primary:active {
-  background-color: var(--color-primary-active) !important;
-  border-color: var(--color-primary-active) !important;
+  background-color: var(--color-primary-active);
+  border-color: var(--color-primary-active);
 }
 
 /* Force Ant Design Pagination components to respond to theme changes instantly */
 .ant-pagination {
-  transition: color 0.3s ease !important;
+  transition: color 0.3s ease;
 }
 
 /* Pagination item (page numbers) */
 .ant-pagination-item {
-  background-color: var(--color-bg-secondary) !important;
-  border-color: var(--color-border-secondary) !important;
-  transition: background-color 0.3s ease, border-color 0.3s ease !important;
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border-secondary);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .ant-pagination-item a {
-  color: var(--color-text-primary) !important;
-  transition: color 0.3s ease !important;
+  color: var(--color-text-primary);
+  transition: color 0.3s ease;
 }
 
 .ant-pagination-item:hover {
-  border-color: var(--color-primary) !important;
+  border-color: var(--color-primary);
 }
 
 .ant-pagination-item:hover a {
-  color: var(--color-primary) !important;
+  color: var(--color-primary);
 }
 
 /* Active pagination item */
 .ant-pagination-item-active {
-  background-color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 .ant-pagination-item-active a {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 .ant-pagination-item-active:hover {
-  background-color: var(--color-primary-hover) !important;
-  border-color: var(--color-primary-hover) !important;
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 /* Pagination prev/next buttons */
 .ant-pagination-prev button,
 .ant-pagination-next button {
-  background-color: var(--color-bg-secondary) !important;
-  color: var(--color-text-primary) !important;
-  border-color: var(--color-border-secondary) !important;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-secondary);
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .ant-pagination-prev:hover button,
 .ant-pagination-next:hover button {
-  color: var(--color-primary) !important;
-  border-color: var(--color-primary) !important;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 /* Disabled pagination buttons */
 .ant-pagination-disabled button,
 .ant-pagination-disabled:hover button {
-  background-color: var(--color-bg-secondary) !important;
-  color: var(--color-text-disabled) !important;
-  border-color: var(--color-border-secondary) !important;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-disabled);
+  border-color: var(--color-border-secondary);
 }
 
 /* Pagination ellipsis */
 .ant-pagination-item-ellipsis {
-  color: var(--color-text-tertiary) !important;
+  color: var(--color-text-tertiary);
 }
