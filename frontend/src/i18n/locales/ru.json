@@ -30,5 +30,6 @@
   "change_language": "Изменить язык",
   "page_not_found_title": "Страница не найдена - Movie App",
   "page_not_found_subtitle": "К сожалению, страница, которую вы посетили, не существует.",
-  "back_to_home": "Вернуться на главную"
+  "back_to_home": "Вернуться на главную",
+  "tmdb_attribution": "Этот продукт использует API TMDB, но не одобрен и не сертифицирован TMDB."
 }

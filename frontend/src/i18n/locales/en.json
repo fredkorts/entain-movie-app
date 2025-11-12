@@ -30,5 +30,6 @@
   "change_language": "Change language",
   "page_not_found_title": "Page Not Found - Movie App",
   "page_not_found_subtitle": "Sorry, the page you visited does not exist.",
-  "back_to_home": "Back to Home"
+  "back_to_home": "Back to Home",
+  "tmdb_attribution": "This product uses the TMDB API but is not endorsed or certified by TMDB."
 }

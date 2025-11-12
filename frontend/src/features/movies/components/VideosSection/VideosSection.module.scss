@@ -12,16 +12,8 @@
   @include m.section-title;
 }
 
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-}
-
 .videoCard {
-  flex: 1;
-  min-width: 280px;
-  max-width: 400px;
+  height: 100%;
   background-color: var(--color-bg-secondary) !important;
   border-color: var(--color-border-secondary) !important;
 
@@ -33,20 +25,6 @@
   // Ensure card meta title text is visible
   :global(.ant-card-meta-title) {
     color: var(--color-text-primary) !important;
-  }
-}
-
-@media (max-width: 767.99px) {
-  .videoCard {
-    min-width: 100%;
-    max-width: 100%;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991.99px) {
-  .videoCard {
-    min-width: calc(50% - var(--spacing-md));
-    max-width: calc(50% - var(--spacing-md));
   }
 }
 
@@ -98,4 +76,9 @@
   color: var(--color-text-primary) !important;
   font-size: var(--text-base);
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  max-width: 100%;
 }

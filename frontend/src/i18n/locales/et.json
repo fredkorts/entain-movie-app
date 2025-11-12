@@ -30,5 +30,6 @@
   "change_language": "Muuda keelt",
   "page_not_found_title": "Lehte ei leitud - Movie App",
   "page_not_found_subtitle": "Vabandust, külastatud lehte ei eksisteeri.",
-  "back_to_home": "Tagasi avalehele"
+  "back_to_home": "Tagasi avalehele",
+  "tmdb_attribution": "See toode kasutab TMDB API-d, kuid TMDB ei ole seda heaks kiitnud ega sertifitseerinud."
 }
