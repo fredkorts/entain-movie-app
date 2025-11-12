@@ -4,6 +4,7 @@ import { ConfigProvider, theme as antdTheme } from "antd";
 import type { ThemeConfig } from "antd";
 import { ThemeContext, useThemeInit } from "./theme/ThemeContext";
 import { useMemo, useState, useEffect } from "react";
+import { HelmetProvider } from "react-helmet-async";
 
 export default function App() {
   const themeCtx = useThemeInit();
@@ -81,10 +82,12 @@ export default function App() {
   }, [themeCtx.mode, refreshKey]);
 
   return (
-    <ThemeContext.Provider value={themeCtx}>
-      <ConfigProvider theme={{ algorithm, token: tokens }}>
-        <RouterProvider router={router} />
-      </ConfigProvider>
-    </ThemeContext.Provider>
+    <HelmetProvider>
+      <ThemeContext.Provider value={themeCtx}>
+        <ConfigProvider theme={{ algorithm, token: tokens }}>
+          <RouterProvider router={router} />
+        </ConfigProvider>
+      </ThemeContext.Provider>
+    </HelmetProvider>
   );
 }

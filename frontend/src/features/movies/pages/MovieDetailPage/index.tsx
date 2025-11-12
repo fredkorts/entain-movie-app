@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useRef } from "react";
 import { getErrorMessage } from "../../../../lib/errorUtils";
 import { useGetMovieDetailQuery } from "../../../../store/api/moviesApi";
-import { DEFAULT_LANGUAGE } from "../../../../lib/constants";
+import { DEFAULT_LANGUAGE, getTmdbImageUrl, TMDB_IMAGE_SIZES } from "../../../../lib/constants";
+import { formatYear } from "../../../../lib/format";
+import SEO from "../../../../shared/components/SEO";
 import MovieHero from "../../components/MovieHero";
 import CastSection from "../../components/CastSection";
 import CrewSection from "../../components/CrewSection";
@@ -68,52 +70,76 @@ export default function MovieDetailPage() {
     </div>
   );
 
+  // Prepare SEO data
+  const year = formatYear(movie.release_date);
+  const titleWithYear = year !== "—" ? `${movie.title} (${year})` : movie.title;
+  const description = movie.overview 
+    ? movie.overview.substring(0, 155) + (movie.overview.length > 155 ? "..." : "")
+    : t("no_overview");
+  const imageUrl = getTmdbImageUrl(
+    movie.poster_path || movie.backdrop_path, 
+    TMDB_IMAGE_SIZES.LARGE
+  );
+  const genres = movie.genres?.map(g => g.name).join(", ");
+  const cast = movie.cast?.slice(0, 5).map(c => c.name).join(", ");
+  const keywords = [genres, cast].filter(Boolean).join(", ");
+
   return (
-    <main className={styles.page} ref={mainRef} tabIndex={-1} aria-labelledby="movie-title" data-testid="movie-detail-page">
-      <Space className={styles.backButton}>
-        <Button type="default" onClick={() => navigate(-1)} data-testid="back-button">
-          {t("back")}
-        </Button>
-      </Space>
+    <>
+      <SEO
+        title={titleWithYear}
+        description={description}
+        image={imageUrl}
+        url={`/movies/${movie.id}`}
+        type="article"
+        keywords={keywords}
+      />
+      <main className={styles.page} ref={mainRef} tabIndex={-1} aria-labelledby="movie-title" data-testid="movie-detail-page">
+        <Space className={styles.backButton}>
+          <Button type="default" onClick={() => navigate(-1)} data-testid="back-button">
+            {t("back")}
+          </Button>
+        </Space>
 
-      {/* Hero Section */}
-      <MovieHero movie={movie} titleId="movie-title" />
+        {/* Hero Section */}
+        <MovieHero movie={movie} titleId="movie-title" />
 
-      {/* Overview */}
-      <div className={styles.overviewSection} data-testid="movie-overview">
-        <Title level={3} className={styles.overviewTitle}>{t("overview")}</Title>
-        <Paragraph className={styles.overviewText}>
-          {movie.overview || t("no_overview")}
-        </Paragraph>
-      </div>
-
-      {/* Cast */}
-      {movie.cast && movie.cast.length > 0 && (
-        <div className={styles.contentSection} data-testid="cast-section">
-          <CastSection cast={movie.cast} />
+        {/* Overview */}
+        <div className={styles.overviewSection} data-testid="movie-overview">
+          <Title level={3} className={styles.overviewTitle}>{t("overview")}</Title>
+          <Paragraph className={styles.overviewText}>
+            {movie.overview || t("no_overview")}
+          </Paragraph>
         </div>
-      )}
 
-      {/* Crew */}
-      {movie.crew && movie.crew.length > 0 && (
-        <div className={styles.contentSection} data-testid="crew-section">
-          <CrewSection crew={movie.crew} />
-        </div>
-      )}
+        {/* Cast */}
+        {movie.cast && movie.cast.length > 0 && (
+          <div className={styles.contentSection} data-testid="cast-section">
+            <CastSection cast={movie.cast} />
+          </div>
+        )}
 
-      {/* Videos */}
-      {movie.videos && movie.videos.length > 0 && (
-        <div className={styles.contentSection} data-testid="videos-section">
-          <VideosSection videos={movie.videos} />
-        </div>
-      )}
+        {/* Crew */}
+        {movie.crew && movie.crew.length > 0 && (
+          <div className={styles.contentSection} data-testid="crew-section">
+            <CrewSection crew={movie.crew} />
+          </div>
+        )}
 
-      {/* Reviews */}
-      {movie.reviews && movie.reviews.length > 0 && (
-        <div className={styles.contentSection} data-testid="reviews-section">
-          <ReviewsSection reviews={movie.reviews} />
-        </div>
-      )}
-    </main>
+        {/* Videos */}
+        {movie.videos && movie.videos.length > 0 && (
+          <div className={styles.contentSection} data-testid="videos-section">
+            <VideosSection videos={movie.videos} />
+          </div>
+        )}
+
+        {/* Reviews */}
+        {movie.reviews && movie.reviews.length > 0 && (
+          <div className={styles.contentSection} data-testid="reviews-section">
+            <ReviewsSection reviews={movie.reviews} />
+          </div>
+        )}
+      </main>
+    </>
   );
 }
