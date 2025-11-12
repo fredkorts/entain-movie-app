@@ -53,6 +53,29 @@
   }
 }
 
+.posterFallback {
+  width: 100%;
+  max-width: var(--hero-poster-max-width);
+  aspect-ratio: 2/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+
+  @include m.desktop-up {
+    max-width: var(--hero-poster-max-width-desktop);
+  }
+}
+
+.fallbackIcon {
+  font-size: 64px;
+  color: var(--hero-text-color);
+  opacity: 0.5;
+}
+
 .movieInfo {
   text-align: center;
 

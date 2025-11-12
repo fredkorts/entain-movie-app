@@ -1,9 +1,11 @@
 import { Typography, Row, Col, Tag, Rate } from "antd";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { VideoCameraOutlined } from "@ant-design/icons";
 import { formatDate } from "../../../../lib/format";
 import { translateGenre } from "../../../../lib/genreTranslations";
 import type { MovieDetail } from "../../api/types";
-import { getTmdbImageUrl, TMDB_IMAGE_SIZES, PLACEHOLDER_IMAGE_PATH } from "../../../../lib/constants";
+import { getTmdbImageUrl, TMDB_IMAGE_SIZES } from "../../../../lib/constants";
 import styles from "./MovieHero.module.scss";
 
 const { Title, Text } = Typography;
@@ -17,10 +19,14 @@ interface MovieHeroProps {
 
 export default function MovieHero({ movie, titleId }: MovieHeroProps) {
   const { t, i18n } = useTranslation();
+  const [posterError, setPosterError] = useState(false);
 
   const heroStyle: React.CSSProperties = {
     backgroundImage: movie.backdrop_path ? `url(${IMG(movie.backdrop_path, TMDB_IMAGE_SIZES.XLARGE)})` : "none",
   };
+
+  const posterUrl = IMG(movie.poster_path, TMDB_IMAGE_SIZES.LARGE);
+  const hasPoster = posterUrl && !posterError;
 
   return (
     <div className={styles.heroSection} style={heroStyle}>
@@ -29,11 +35,18 @@ export default function MovieHero({ movie, titleId }: MovieHeroProps) {
           <Row gutter={24} align="middle">
             <Col xs={24} md={6}>
               <div className={styles.posterContainer}>
-                <img
-                  src={IMG(movie.poster_path, TMDB_IMAGE_SIZES.LARGE) || PLACEHOLDER_IMAGE_PATH}
-                  alt={movie.title}
-                  className={styles.poster}
-                />
+                {hasPoster ? (
+                  <img
+                    src={posterUrl}
+                    alt={movie.title}
+                    className={styles.poster}
+                    onError={() => setPosterError(true)}
+                  />
+                ) : (
+                  <div className={styles.posterFallback}>
+                    <VideoCameraOutlined className={styles.fallbackIcon} />
+                  </div>
+                )}
               </div>
             </Col>
             <Col xs={24} md={18}>

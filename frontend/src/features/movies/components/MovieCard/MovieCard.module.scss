@@ -19,6 +19,34 @@
   @include m.hover-zoom-image(1.05);
 }
 
+.fallbackContainer {
+  width: 100%;
+  aspect-ratio: 2/3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+  text-align: center;
+  gap: var(--spacing-md);
+}
+
+.fallbackIcon {
+  font-size: 48px;
+  color: var(--color-text-tertiary);
+  opacity: 0.5;
+}
+
+.fallbackTitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--leading-tight);
+  @include m.text-truncate(3);
+}
+
 .content {
   margin-top: var(--spacing-sm);
   padding: var(--spacing-xs);

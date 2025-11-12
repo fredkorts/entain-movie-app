@@ -73,13 +73,6 @@ export const EXTERNAL_LINK_TARGET = '_blank';
 export const YOUTUBE_THUMBNAIL_QUALITY = 'maxresdefault';
 
 // =============================================================================
-// PLACEHOLDER VALUES
-// =============================================================================
-
-/** Default placeholder image path */
-export const PLACEHOLDER_IMAGE_PATH = '/placeholder.svg';
-
-// =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
 

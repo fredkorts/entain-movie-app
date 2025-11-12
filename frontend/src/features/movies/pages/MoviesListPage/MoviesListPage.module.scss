@@ -10,7 +10,25 @@
 }
 
 .grid {
-  @include m.responsive-grid(var(--movie-card-min-width));
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: 1fr; // 1 column on mobile
+  
+  @include m.tablet-up {
+    // 2 columns, but with a max width to keep cards smaller
+    grid-template-columns: repeat(2, minmax(250px, 300px));
+    justify-content: space-evenly;
+  }
+  
+  @include m.desktop-up {
+    // On larger screens, reduce max width further
+    grid-template-columns: repeat(2, minmax(220px, 280px));
+  }
+  
+  @include m.large-up {
+    // On very large screens, keep cards even more compact
+    grid-template-columns: repeat(2, minmax(220px, 260px));
+  }
 }
 
 .card {
