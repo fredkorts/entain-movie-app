@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useRef } from "react";
 import { getErrorMessage } from "../../../../lib/errorUtils";
 import { useGetMovieDetailQuery } from "../../../../store/api/moviesApi";
-import { DEFAULT_LANGUAGE, getTmdbImageUrl, TMDB_IMAGE_SIZES } from "../../../../lib/constants";
+import { getTmdbImageUrl, TMDB_IMAGE_SIZES } from "../../../../lib/constants";
 import { formatYear } from "../../../../lib/format";
 import SEO from "../../../../shared/components/SEO";
 import MovieHero from "../../components/MovieHero";
@@ -18,9 +18,9 @@ const { Title, Paragraph } = Typography;
 
 export default function MovieDetailPage() {
   const { id } = useParams<{ id: string }>();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: movie, isLoading, error } = useGetMovieDetailQuery(
-    { id: id!, lang: DEFAULT_LANGUAGE }, // We can add i18n.language back when ready
+    { id: id!, lang: i18n.language },
     { skip: !id }
   );
   const navigate = useNavigate();

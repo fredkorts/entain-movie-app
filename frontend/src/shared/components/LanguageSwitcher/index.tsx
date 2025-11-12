@@ -15,16 +15,13 @@ export default function LanguageSwitcher() {
   const [cur, setCur] = useState(i18n.language.split("-")[0] || "en");
   const { t } = useTranslation();
 
-  // Sync with i18n changes (including external changes)
   useEffect(() => {
     const handleLanguageChange = (lng: string) => {
       setCur(lng.split("-")[0] || "en");
     };
     
-    // Set initial state
     handleLanguageChange(i18n.language);
     
-    // Listen for language changes
     i18n.on('languageChanged', handleLanguageChange);
     
     return () => {
@@ -35,7 +32,6 @@ export default function LanguageSwitcher() {
   const onClick: MenuProps["onClick"] = ({ key }) => {
     try {
       i18n.changeLanguage(key);
-      // Save to localStorage only after successful language change
       if (typeof window !== 'undefined' && window.localStorage) {
         localStorage.setItem("lang", key);
       }

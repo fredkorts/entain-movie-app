@@ -79,11 +79,9 @@ export function translateGenre(genre: string, language: string): string {
     return genre; // Return original for English or unsupported languages
   }
   
-  // Type-safe access now that we've verified the language exists
   const lang = baseLang as SupportedLanguage;
   const translations = genreTranslations[lang];
   
-  // Defensive check: verify genre exists in the translations
   if (!(genre in translations)) {
     return genre; // Return original if genre not found
   }

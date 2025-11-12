@@ -26,13 +26,7 @@ export default class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBo
     console.error('Error caught by boundary:', error);
     console.error('Component stack:', errorInfo.componentStack);
     
-    // Call custom error handler if provided
     this.props.onError?.(error, errorInfo);
-    
-    // In production, you might want to log this to an error reporting service
-    if (import.meta.env.PROD) {
-      // Example: logErrorToService(error, errorInfo);
-    }
   }
 
   handleReset = () => {
