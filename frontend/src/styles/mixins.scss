@@ -58,8 +58,8 @@
 
 // Standard section title
 @mixin section-title {
-  margin-bottom: var(--spacing-lg) !important;
-  color: var(--color-text-primary) !important;
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text-primary);
 }
 
 // Flex grid with consistent gaps
@@ -148,27 +148,27 @@
 
 // Standard member name styling
 @mixin member-name {
-  font-size: var(--text-base) !important;
-  font-weight: var(--font-weight-semibold) !important;
-  color: var(--color-text-primary) !important;
-  line-height: var(--leading-tight) !important;
-  margin-bottom: var(--spacing-xs) !important;
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  line-height: var(--leading-tight);
+  margin-bottom: var(--spacing-xs);
   @include text-truncate(2);
 }
 
 // Standard member role/job styling
 @mixin member-role {
-  font-size: var(--text-sm) !important;
-  color: var(--color-text-secondary) !important;
-  line-height: var(--leading-tight) !important;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--leading-tight);
   margin: 0;
 }
 
 // Hero text with shadow
 @mixin hero-text($size: var(--text-lg)) {
-  color: var(--hero-text-color) !important;
-  text-shadow: var(--hero-text-shadow) !important;
-  font-size: $size !important;
+  color: var(--hero-text-color);
+  text-shadow: var(--hero-text-shadow);
+  font-size: $size;
 }
 
 /* =============================================================================
@@ -177,8 +177,9 @@
 
 // Standard focus outline
 @mixin focus-outline($color: var(--color-primary)) {
-  &:focus {
-    outline: 2px solid $color;
+  &:focus,
+  &:focus-visible {
+    outline: var(--border-width-focus) solid $color;
     outline-offset: 2px;
     border-radius: var(--radius-sm);
   }
@@ -239,15 +240,15 @@
 
 // Visually hidden (accessible but invisible)
 @mixin visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 // Center content absolutely

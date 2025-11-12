@@ -13,40 +13,38 @@
 }
 
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
+  @include m.flex-grid(var(--spacing-md));
 }
 
 .videoCard {
   flex: 1;
-  min-width: 280px;
-  max-width: 400px;
-  background-color: var(--color-bg-secondary) !important;
-  border-color: var(--color-border-secondary) !important;
+  min-width: var(--video-card-min-width);
+  max-width: var(--video-card-max-width);
+  background-color: var(--color-bg-secondary);
+  border-color: var(--color-border-secondary);
 
   // Ensure the card body respects theme
   :global(.ant-card-body) {
-    background-color: transparent !important;
+    background-color: transparent;
   }
 
   // Ensure card meta title text is visible
   :global(.ant-card-meta-title) {
-    color: var(--color-text-primary) !important;
+    color: var(--color-text-primary);
   }
 }
 
-@media (max-width: 767.99px) {
+@include m.mobile-only {
   .videoCard {
     min-width: 100%;
     max-width: 100%;
   }
 }
 
-@media (min-width: 768px) and (max-width: 991.99px) {
+@include m.desktop-only {
   .videoCard {
-    min-width: calc(50% - var(--spacing-md));
-    max-width: calc(50% - var(--spacing-md));
+    min-width: var(--video-card-tablet-width);
+    max-width: var(--video-card-tablet-width);
   }
 }
 
@@ -56,27 +54,14 @@
   overflow: hidden;
   border-radius: var(--radius-md) var(--radius-md) 0 0;
   cursor: pointer;
-}
-
-.thumbnailContainer:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.thumbnailContainer:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  @include m.focus-outline();
 }
 
 .thumbnail {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
-}
-
-.videoCard:hover .thumbnail {
-  transform: scale(1.05);
+  @include m.hover-zoom-image(1.05);
 }
 
 .playIcon {
@@ -95,7 +80,7 @@
 }
 
 .videoTitle {
-  color: var(--color-text-primary) !important;
+  color: var(--color-text-primary);
   font-size: var(--text-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }

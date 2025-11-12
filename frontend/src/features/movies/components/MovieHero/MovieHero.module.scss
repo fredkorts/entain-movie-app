@@ -18,7 +18,7 @@
   padding: var(--hero-padding);
   border-radius: var(--radius-lg);
   color: var(--hero-text-color);
-  min-height: 300px;
+  min-height: var(--hero-min-height);
   display: flex;
   align-items: center;
 }
@@ -39,13 +39,13 @@
 
 .poster {
   width: 100%;
-  max-width: 250px;
+  max-width: var(--hero-poster-max-width);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
   transition: transform 0.3s ease;
 
   @include m.desktop-up {
-    max-width: 300px;
+    max-width: var(--hero-poster-max-width-desktop);
   }
 
   &:hover {
@@ -63,18 +63,18 @@
 
 .title {
   @include m.hero-text(var(--text-3xl));
-  margin-bottom: var(--spacing-sm) !important;
-  line-height: var(--leading-tight) !important;
+  margin-bottom: var(--spacing-sm);
+  line-height: var(--leading-tight);
 
   @include m.desktop-up {
-    font-size: 2.5rem !important;
+    font-size: var(--hero-title-desktop-size);
   }
 }
 
 .tagline {
   @include m.hero-text(var(--text-lg));
-  font-style: italic !important;
-  color: var(--hero-text-secondary) !important;
+  font-style: italic;
+  color: var(--hero-text-secondary);
   display: block;
   margin-bottom: var(--spacing-md);
 }
@@ -92,7 +92,7 @@
 }
 
 .genre {
-  margin-bottom: var(--spacing-xs) !important;
+  margin-bottom: var(--spacing-xs);
 }
 
 .movieDetails {
@@ -125,13 +125,13 @@
 
 .detailLabel {
   @include m.hero-text(var(--text-base));
-  font-weight: 600 !important;
-  margin-bottom: var(--spacing-xs) !important;
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
 }
 
 .detailValue {
   @include m.hero-text(var(--text-base));
-  color: var(--hero-text-secondary) !important;
+  color: var(--hero-text-secondary);
 }
 
 .ratingContainer {
@@ -142,12 +142,12 @@
 }
 
 .stars {
-  font-size: var(--text-base) !important;
+  font-size: var(--text-base);
 }
 
 .ratingValue {
   @include m.hero-text(var(--text-base));
-  color: var(--hero-text-secondary) !important;
-  margin-left: var(--spacing-sm) !important;
-  font-weight: 600 !important;
+  color: var(--hero-text-secondary);
+  margin-left: var(--spacing-sm);
+  font-weight: 600;
 }

@@ -21,7 +21,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   flex: 1;
-  min-width: 250px;
+  min-width: var(--crew-card-min-width);
   margin-bottom: var(--spacing-sm);
 
   @include m.mobile-only {
@@ -39,7 +39,7 @@
 
 .memberJob {
   @include m.member-role;
-  margin-top: 2px;
+  margin-top: var(--crew-job-spacing);
 }
 
 .avatar {

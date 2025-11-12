@@ -1,3 +1,5 @@
+@use "../../../../styles/mixins" as m;
+
 .page {
   padding: var(--spacing-lg);
   background-color: var(--color-bg-primary);
@@ -11,7 +13,7 @@
 
 .contentSection {
   background-color: var(--color-bg-primary);
-  border: 1px solid var(--color-border-secondary);
+  border: var(--border-width-thin) solid var(--color-border-secondary);
   border-radius: var(--radius-md);
   margin-bottom: var(--card-margin);
   padding: var(--card-padding);
@@ -20,7 +22,7 @@
 
 .overviewSection {
   background-color: var(--color-bg-primary);
-  border: 1px solid var(--color-border-secondary);
+  border: var(--border-width-thin) solid var(--color-border-secondary);
   border-radius: var(--radius-md);
   margin-bottom: var(--card-margin);
   padding: var(--card-padding);
@@ -28,15 +30,14 @@
 }
 
 .overviewTitle {
-  margin-bottom: var(--spacing-md) !important;
-  color: var(--color-text-primary) !important;
+  @include m.section-title;
 }
 
 .overviewText {
-  font-size: var(--text-lg) !important;
-  line-height: var(--leading-relaxed) !important;
-  color: var(--color-text-primary) !important;
-  margin: 0 !important;
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-primary);
+  margin: 0;
 }
 
 .errorAlert {
@@ -48,11 +49,11 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 767.99px) {
+@include m.mobile-only {
   .page {
     padding: var(--spacing-md);
   }
-  
+
   .contentSection {
     margin-bottom: var(--spacing-lg);
     padding: var(--spacing-md);

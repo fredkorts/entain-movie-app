@@ -1,3 +1,5 @@
+@use "../../../styles/mixins" as m;
+
 .skipLinks {
   position: absolute;
   top: 0;
@@ -8,21 +10,20 @@
 
 .skipLink {
   position: absolute;
-  top: -40px;
-  left: 6px;
+  top: calc(-1 * var(--spacing-2xl));
+  left: var(--spacing-sm);
   background: var(--color-primary);
   color: white;
-  padding: 8px 16px;
+  padding: var(--spacing-sm) var(--spacing-md);
   text-decoration: none;
-  border-radius: 0 0 4px 4px;
-  font-weight: 600;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
   transition: top 0.2s ease;
 }
 
 .skipLink:focus {
   top: 0;
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  @include m.focus-outline();
 }
 
 .skipLink:hover {
