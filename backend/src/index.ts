@@ -49,8 +49,8 @@ app.use(errorHandler);
 
 export default app;
 
-// Local dev only
-if (!process.env.VERCEL) {
+// Local dev only (skip in tests to avoid port conflicts)
+if (!process.env.VERCEL && !process.env.VITEST) {
   const port = Number(process.env.PORT) || 3001;
   app.listen(port, () => console.log(`Backend listening on http://localhost:${port}`));
 }
