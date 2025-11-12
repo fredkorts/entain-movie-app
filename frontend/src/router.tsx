@@ -3,6 +3,7 @@ import AppLayout from "./shared/layouts/AppLayout.tsx"
 import ErrorBoundary from "./shared/components/ErrorBoundary"
 import MoviesListPage from "./features/movies/pages/MoviesListPage";
 import MovieDetailPage from "./features/movies/pages/MovieDetailPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +27,14 @@ const router = createBrowserRouter([
                 element: (
                     <ErrorBoundary>
                         <MovieDetailPage />
+                    </ErrorBoundary>
+                )
+            },
+            {
+                path: "*",
+                element: (
+                    <ErrorBoundary>
+                        <NotFoundPage />
                     </ErrorBoundary>
                 )
             },

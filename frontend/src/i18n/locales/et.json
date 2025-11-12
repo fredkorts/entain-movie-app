@@ -27,5 +27,9 @@
   "skip_to_main_content": "Liigu põhisisu juurde",
   "skip_to_navigation": "Liigu navigatsiooni juurde",
   "toggle_theme": "Lülita teemat",
-  "change_language": "Muuda keelt"
+  "change_language": "Muuda keelt",
+  "page_not_found_title": "Lehte ei leitud - Movie App",
+  "page_not_found_subtitle": "Vabandust, külastatud lehte ei eksisteeri.",
+  "back_to_home": "Tagasi avalehele",
+  "tmdb_attribution": "See toode kasutab TMDB API-d, kuid TMDB ei ole seda heaks kiitnud ega sertifitseerinud."
 }
