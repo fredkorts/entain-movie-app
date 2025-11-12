@@ -63,6 +63,7 @@
 
 .title {
   @include m.hero-text(var(--text-3xl));
+  color: var(--hero-text-color) !important;
   margin-bottom: var(--spacing-sm);
   line-height: var(--leading-tight);
 

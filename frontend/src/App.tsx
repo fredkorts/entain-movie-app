@@ -3,17 +3,25 @@ import router from "./router";
 import { ConfigProvider, theme as antdTheme } from "antd";
 import type { ThemeConfig } from "antd";
 import { ThemeContext, useThemeInit } from "./theme/ThemeContext";
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 export default function App() {
   const themeCtx = useThemeInit();
   const algorithm = themeCtx.mode === "dark" ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm;
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // Force re-computation of tokens after theme changes
+  useEffect(() => {
+    // Small delay to ensure DOM has updated with new data-theme attribute
+    const timer = setTimeout(() => {
+      setRefreshKey(prev => prev + 1);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [themeCtx.mode]);
 
   // Resolve CSS variables to concrete color values for Ant Design tokens
   const tokens = useMemo((): ThemeConfig["token"] | undefined => {
     if (typeof window === "undefined") return undefined;
-    // Consume mode so the memo recomputes when theme changes
-    void themeCtx.mode;
 
     const styles = getComputedStyle(document.documentElement);
     const val = (name: string) => styles.getPropertyValue(name).trim();
@@ -27,6 +35,7 @@ export default function App() {
       
       // Text
       colorText: val("--color-text-primary") || undefined,
+      colorTextHeading: val("--color-text-primary") || undefined,
       colorTextSecondary: val("--color-text-secondary") || undefined,
       colorTextTertiary: val("--color-text-tertiary") || undefined,
       colorTextDisabled: val("--color-text-disabled") || undefined,
@@ -67,7 +76,9 @@ export default function App() {
       // Shape
       borderRadius: 8,
     };
-  }, [themeCtx.mode]);
+    // We DO want to recompute when theme changes or refreshKey updates
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [themeCtx.mode, refreshKey]);
 
   return (
     <ThemeContext.Provider value={themeCtx}>
