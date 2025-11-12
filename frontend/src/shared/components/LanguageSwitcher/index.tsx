@@ -49,7 +49,11 @@ export default function LanguageSwitcher() {
       trigger={["click"]}
       menu={{ items: langs, onClick }}
     >
-      <button aria-label={t("change_language") || "Change language"} className={styles.switcherButton}>
+      <button 
+        aria-label={t("change_language") || "Change language"} 
+        className={styles.switcherButton}
+        data-testid="language-switcher"
+      >
         {cur.toUpperCase()}
       </button>
     </Dropdown>

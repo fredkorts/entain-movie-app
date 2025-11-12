@@ -80,7 +80,7 @@ export default function MovieDetailPage() {
       <MovieHero movie={movie} titleId="movie-title" />
 
       {/* Overview */}
-      <div className={styles.overviewSection}>
+      <div className={styles.overviewSection} data-testid="movie-overview">
         <Title level={3} className={styles.overviewTitle}>{t("overview")}</Title>
         <Paragraph className={styles.overviewText}>
           {movie.overview || t("no_overview")}
@@ -89,28 +89,28 @@ export default function MovieDetailPage() {
 
       {/* Cast */}
       {movie.cast && movie.cast.length > 0 && (
-        <div className={styles.contentSection}>
+        <div className={styles.contentSection} data-testid="cast-section">
           <CastSection cast={movie.cast} />
         </div>
       )}
 
       {/* Crew */}
       {movie.crew && movie.crew.length > 0 && (
-        <div className={styles.contentSection}>
+        <div className={styles.contentSection} data-testid="crew-section">
           <CrewSection crew={movie.crew} />
         </div>
       )}
 
       {/* Videos */}
       {movie.videos && movie.videos.length > 0 && (
-        <div className={styles.contentSection}>
+        <div className={styles.contentSection} data-testid="videos-section">
           <VideosSection videos={movie.videos} />
         </div>
       )}
 
       {/* Reviews */}
       {movie.reviews && movie.reviews.length > 0 && (
-        <div className={styles.contentSection}>
+        <div className={styles.contentSection} data-testid="reviews-section">
           <ReviewsSection reviews={movie.reviews} />
         </div>
       )}

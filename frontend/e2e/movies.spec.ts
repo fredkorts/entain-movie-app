@@ -5,7 +5,7 @@ test.describe('Movies List Page', () => {
     await page.goto('/');
     
     // Check for search input
-    const searchInput = page.getByPlaceholder(/search/i);
+    const searchInput = page.getByTestId('movie-search-input');
     await expect(searchInput).toBeVisible();
     
     // Check for main content area
@@ -27,7 +27,7 @@ test.describe('Movies List Page', () => {
   test('should search for movies', async ({ page }) => {
     await page.goto('/');
     
-    const searchInput = page.getByPlaceholder(/search/i);
+    const searchInput = page.getByTestId('movie-search-input');
     await searchInput.fill('action');
     
     // URL should contain search query
@@ -67,7 +67,7 @@ test.describe('Movies List Page', () => {
   test('should handle empty search results', async ({ page }) => {
     await page.goto('/');
     
-    const searchInput = page.getByPlaceholder(/search/i);
+    const searchInput = page.getByTestId('movie-search-input');
     await searchInput.fill('zzzzznonexistentmovie123');
     
     // Wait for search API response to complete
@@ -92,10 +92,11 @@ test.describe('Movie Detail Page', () => {
     await page.goto('/movie/1');
     
     // Wait for content to load
-    await page.waitForSelector('h1', { timeout: 10000 });
+    const title = page.getByTestId('movie-title');
+    await expect(title).toBeVisible({ timeout: 10000 });
     
     // Should have a back button
-    const backButton = page.getByRole('button', { name: /back/i });
+    const backButton = page.getByTestId('back-button');
     await expect(backButton).toBeVisible();
   });
 
@@ -103,7 +104,7 @@ test.describe('Movie Detail Page', () => {
     await page.goto('/movie/1');
     
     // Wait for back button
-    const backButton = page.getByRole('button', { name: /back/i });
+    const backButton = page.getByTestId('back-button');
     await expect(backButton).toBeVisible();
     
     await backButton.click();
@@ -145,14 +146,14 @@ test.describe('Language Switching', () => {
     await page.goto('/');
     
     // Find language switcher button
-    const langSwitcher = page.locator('button[aria-label="Change language"]');
+    const langSwitcher = page.getByTestId('language-switcher');
     
     // Assert the language switcher is visible (fail if not found)
     await expect(langSwitcher).toBeVisible();
     
     // Verify initial language is English
-    const initialPlaceholder = page.locator('input[placeholder="Search movies"]');
-    await expect(initialPlaceholder).toBeVisible();
+    const searchInput = page.getByTestId('movie-search-input');
+    await expect(searchInput).toHaveAttribute('placeholder', 'Search movies');
     
     // Click the language switcher to open menu
     await langSwitcher.click();
@@ -170,8 +171,7 @@ test.describe('Language Switching', () => {
     
     // Verify the language changed by checking a translatable element
     // Search placeholder should now be "Otsi filme" (Estonian)
-    const estonianPlaceholder = page.locator('input[placeholder="Otsi filme"]');
-    await expect(estonianPlaceholder).toBeVisible();
+    await expect(searchInput).toHaveAttribute('placeholder', 'Otsi filme');
     
     // Additionally verify the HTML lang attribute changed
     const htmlLang = await page.locator('html').getAttribute('lang');

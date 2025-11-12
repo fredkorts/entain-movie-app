@@ -38,7 +38,7 @@ export default function MovieHero({ movie, titleId }: MovieHeroProps) {
             </Col>
             <Col xs={24} md={18}>
               <div className={styles.movieInfo}>
-                <Title level={1} className={styles.title} id={titleId}>
+                <Title level={1} className={styles.title} id={titleId} data-testid="movie-title">
                   {movie.title}
                 </Title>
                 

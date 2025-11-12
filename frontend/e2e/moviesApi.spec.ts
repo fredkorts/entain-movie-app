@@ -6,10 +6,10 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/');
       
       // Wait for API call to complete and movies to render
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       
       // Verify multiple movies are displayed
-      const movieCards = page.locator('[class*="card"]');
       const count = await movieCards.count();
       expect(count).toBeGreaterThan(0);
       
@@ -22,10 +22,11 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/?q=action');
       
       // Wait for search results
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       
       // Search input should have the query value
-      const searchInput = page.getByPlaceholder(/search/i);
+      const searchInput = page.getByTestId('movie-search-input');
       await expect(searchInput).toHaveValue('action');
     });
 
@@ -33,20 +34,21 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/?page=2');
       
       // Wait for movies to load
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       
       // URL should maintain page parameter
       await expect(page).toHaveURL(/page=2/);
       
       // Pagination should show page 2 as active
-      const pagination = page.locator('[class*="pagination"]');
+      const pagination = page.getByTestId('pagination');
       await expect(pagination).toBeVisible({ timeout: 5000 });
     });
 
     test('should debounce search API calls', async ({ page }) => {
       await page.goto('/');
       
-      const searchInput = page.getByPlaceholder(/search/i);
+      const searchInput = page.getByTestId('movie-search-input');
       
       // Type quickly (should debounce)
       await searchInput.fill('a');
@@ -63,14 +65,16 @@ test.describe('Movies API Integration E2E Tests', () => {
       await expect(page).toHaveURL(/q=action/);
       
       // Results should be visible
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
     });
 
     test('should preserve search query when paginating', async ({ page }) => {
       await page.goto('/?q=action');
       
       // Wait for initial results
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       
       // Navigate to page 2
       const pagination = page.getByTestId('pagination');
@@ -88,14 +92,14 @@ test.describe('Movies API Integration E2E Tests', () => {
       await expect(page).toHaveURL(/page=2/);
       
       // Search input should still have value
-      const searchInput = page.getByPlaceholder(/search/i);
+      const searchInput = page.getByTestId('movie-search-input');
       await expect(searchInput).toHaveValue('action');
     });
 
     test('should clear search and reload all movies', async ({ page }) => {
       await page.goto('/?q=action');
       
-      const searchInput = page.getByPlaceholder(/search/i);
+      const searchInput = page.getByTestId('movie-search-input');
       await expect(searchInput).toHaveValue('action');
       
       // Clear search
@@ -122,14 +126,11 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/movie/1');
       
       // Wait for movie details to load
-      await page.waitForSelector('h1', { timeout: 10000 });
-      
-      // Verify essential movie information is displayed
-      const title = page.locator('h1');
-      await expect(title).toBeVisible();
+      const title = page.getByTestId('movie-title');
+      await expect(title).toBeVisible({ timeout: 10000 });
       
       // Check for overview/description
-      const overview = page.locator('[class*="overview"], p').first();
+      const overview = page.getByTestId('movie-overview');
       await expect(overview).toBeVisible();
     });
 
@@ -137,10 +138,11 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/movie/1');
       
       // Wait for page to load
-      await page.waitForSelector('h1', { timeout: 10000 });
+      const title = page.getByTestId('movie-title');
+      await expect(title).toBeVisible({ timeout: 10000 });
       
-      // Look for cast section (adjust selector based on your implementation)
-      const castSection = page.locator('[class*="cast"], [class*="Cast"]').first();
+      // Look for cast section
+      const castSection = page.getByTestId('cast-section');
       if (await castSection.isVisible({ timeout: 5000 })) {
         // Should have cast member information
         await expect(castSection).toContainText(/./);
@@ -150,10 +152,11 @@ test.describe('Movies API Integration E2E Tests', () => {
     test('should display crew information', async ({ page }) => {
       await page.goto('/movie/1');
       
-      await page.waitForSelector('h1', { timeout: 10000 });
+      const title = page.getByTestId('movie-title');
+      await expect(title).toBeVisible({ timeout: 10000 });
       
       // Look for crew section
-      const crewSection = page.locator('[class*="crew"], [class*="Crew"]').first();
+      const crewSection = page.getByTestId('crew-section');
       if (await crewSection.isVisible({ timeout: 5000 })) {
         await expect(crewSection).toContainText(/./);
       }
@@ -168,7 +171,8 @@ test.describe('Movies API Integration E2E Tests', () => {
       
       // Check if redirected to home or shows error
       const currentUrl = page.url();
-      const hasError = await page.locator('[class*="error"], [class*="Error"]').isVisible();
+      const errorAlert = page.getByTestId('error-alert');
+      const hasError = await errorAlert.isVisible();
       
       // Either we're redirected or we see an error message
       expect(currentUrl === '/' || hasError).toBe(true);
@@ -184,7 +188,7 @@ test.describe('Movies API Integration E2E Tests', () => {
       await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       
       // Find and click language switcher
-      const langSwitcher = page.locator('button[aria-label="Change language"]');
+      const langSwitcher = page.getByTestId('language-switcher');
       
       // Assert language switcher is visible
       await expect(langSwitcher).toBeVisible();
@@ -214,7 +218,7 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/');
       
       // Change language first
-      const langSwitcher = page.locator('button[aria-label="Change language"]');
+      const langSwitcher = page.getByTestId('language-switcher');
       
       // Assert language switcher is visible
       await expect(langSwitcher).toBeVisible();
@@ -238,7 +242,7 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/movie/1');
       
       // Wait for content to load
-      const title = page.getByRole('heading', { level: 1 });
+      const title = page.getByTestId('movie-title');
       await expect(title).toBeVisible({ timeout: 10000 });
       
       // Verify page is loaded
@@ -259,21 +263,22 @@ test.describe('Movies API Integration E2E Tests', () => {
       await page.goto('/');
       
       // Wait for initial load
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       const initialCallCount = apiCallCount;
       
       // Navigate to a detail page
-      const firstMovieLink = page.locator('a[href*="/movie/"]').first();
+      const firstMovieLink = movieCards.first();
       await firstMovieLink.click();
       
-      await page.waitForSelector('h1', { timeout: 10000 });
+      const title = page.getByTestId('movie-title');
+      await expect(title).toBeVisible({ timeout: 10000 });
       
       // Go back to list
       await page.goBack();
       
       // Movies should load from cache - no new API call
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
-      const movieCards = page.locator('[class*="card"]');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       const count = await movieCards.count();
       expect(count).toBeGreaterThan(0);
       
@@ -284,22 +289,24 @@ test.describe('Movies API Integration E2E Tests', () => {
     test('should handle rapid navigation between list and detail', async ({ page }) => {
       await page.goto('/');
       
-      await page.waitForSelector('[class*="card"]', { timeout: 10000 });
+      const movieCards = page.getByTestId('movie-card');
+      await expect(movieCards.first()).toBeVisible({ timeout: 10000 });
       
       // Click on first movie
-      await page.locator('a[href*="/movie/"]').first().click();
-      await page.waitForSelector('h1', { timeout: 10000 });
+      await movieCards.first().click();
+      
+      const title = page.getByTestId('movie-title');
+      await expect(title).toBeVisible({ timeout: 10000 });
       
       // Go back
       await page.goBack();
-      await page.waitForSelector('[class*="card"]', { timeout: 5000 });
+      await expect(movieCards.first()).toBeVisible({ timeout: 5000 });
       
       // Click on same or different movie again
-      await page.locator('a[href*="/movie/"]').nth(1).click();
-      await page.waitForSelector('h1', { timeout: 10000 });
+      await movieCards.nth(1).click();
+      await expect(title).toBeVisible({ timeout: 10000 });
       
       // Should handle without errors
-      const title = page.locator('h1');
       await expect(title).toBeVisible();
     });
   });
