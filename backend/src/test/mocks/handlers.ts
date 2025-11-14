@@ -1,10 +1,9 @@
 import { http, HttpResponse } from 'msw';
-
-const TMDB_BASE = 'https://api.themoviedb.org/3';
+import { TMDB_BASE_URL } from '../../config/constants.js';
 
 export const handlers = [
   // Mock TMDB discover/search movies endpoint
-  http.get(`${TMDB_BASE}/discover/movie`, ({ request }) => {
+  http.get(`${TMDB_BASE_URL}/discover/movie`, ({ request }) => {
     const url = new URL(request.url);
     const page = url.searchParams.get('page') || '1';
 
@@ -23,7 +22,7 @@ export const handlers = [
   }),
 
   // Mock TMDB search endpoint
-  http.get(`${TMDB_BASE}/search/movie`, ({ request }) => {
+  http.get(`${TMDB_BASE_URL}/search/movie`, ({ request }) => {
     const url = new URL(request.url);
     const page = url.searchParams.get('page') || '1';
     const query = url.searchParams.get('query') || '';
@@ -44,7 +43,7 @@ export const handlers = [
   }),
 
   // Mock TMDB movie detail endpoint
-  http.get(`${TMDB_BASE}/movie/:id`, ({ params }) => {
+  http.get(`${TMDB_BASE_URL}/movie/:id`, ({ params }) => {
     const { id } = params;
 
     // Simulate 404 for specific test ID

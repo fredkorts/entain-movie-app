@@ -4,6 +4,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import moviesRouter from './routes/movies';
+import { DEFAULT_PORT } from './config/constants.js';
 
 const app = express();
 
@@ -51,6 +52,6 @@ export default app;
 
 // Local dev only (skip in tests to avoid port conflicts)
 if (!process.env.VERCEL && !process.env.VITEST) {
-  const port = Number(process.env.PORT) || 3001;
+  const port = Number(process.env.PORT) || DEFAULT_PORT;
   app.listen(port, () => console.log(`Backend listening on http://localhost:${port}`));
 }

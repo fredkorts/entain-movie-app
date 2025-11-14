@@ -5,6 +5,9 @@
  * and easy maintenance.
  */
 
+// Re-export production constants that tests also need
+export { MAX_BACKDROPS, MAX_POSTERS, MAX_REVIEWS } from '../config/constants.js';
+
 // ============================================================================
 // Environment Variables
 // ============================================================================
@@ -38,19 +41,6 @@ export const SEARCH_START_ID = 200;
 
 /** Sample search query used in tests */
 export const TEST_SEARCH_QUERY = 'batman';
-
-// ============================================================================
-// Mock Data Limits (from controllers/movies.ts)
-// ============================================================================
-
-/** Maximum number of backdrops returned in movie detail */
-export const MAX_BACKDROPS = 12;
-
-/** Maximum number of posters returned in movie detail */
-export const MAX_POSTERS = 8;
-
-/** Maximum number of reviews returned in movie detail */
-export const MAX_REVIEWS = 5;
 
 // ============================================================================
 // Mock Totals (from MSW handlers)

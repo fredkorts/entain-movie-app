@@ -1,17 +1,26 @@
 import axios from "axios";
+import type { TMDBMovieDetail, MovieDetail } from "../types/tmdb.js";
+import {
+  TMDB_BASE_URL,
+  TMDB_REQUEST_TIMEOUT,
+  MAX_BACKDROPS,
+  MAX_POSTERS,
+  MAX_REVIEWS,
+  LANGUAGE_MAP,
+  DEFAULT_LANGUAGE,
+  RESULTS_PER_PAGE,
+  TMDB_RESULTS_PER_PAGE
+} from "../config/constants.js";
+import { logger } from "../utils/logger.js";
 
 const TMDB = axios.create({
-  baseURL: "https://api.themoviedb.org/3",
-  timeout: 10_000
+  baseURL: TMDB_BASE_URL,
+  timeout: TMDB_REQUEST_TIMEOUT
 });
 
 function mapLanguage(lang?: string): string {
   const l = (lang || "en").split("-")[0].toLowerCase();
-  // Map known languages to TMDB BCP-47 tags
-  if (l === "ru") return "ru-RU";
-  if (l === "en") return "en-US";
-  // TMDB doesn't really have Estonian; fall back to English
-  return "en-US";
+  return LANGUAGE_MAP[l] || DEFAULT_LANGUAGE;
 }
 
 
@@ -39,10 +48,6 @@ export async function fetchMovies(opts: { page?: number; search?: string; lang?:
   
   const search = (opts.search ?? "").trim();
   const language = mapLanguage(opts.lang);
-  
-  // We want 10 results per page, but TMDB gives us 20
-  const RESULTS_PER_PAGE = 10;
-  const TMDB_RESULTS_PER_PAGE = 20;
   
   // Calculate which TMDB page to fetch and the offset within that page
   const tmdbPage = Math.ceil((page * RESULTS_PER_PAGE) / TMDB_RESULTS_PER_PAGE);
@@ -95,5 +100,103 @@ export async function fetchMovieById(id: string, lang?: string) {
     runtime: data.runtime ?? 0,
     vote_average: data.vote_average ?? 0,
     genres: data.genres ?? []
+  };
+}
+
+/**
+ * Fetches comprehensive movie details from TMDB including cast, crew, videos, reviews, and images.
+ * Automatically falls back to English if the requested language has no overview.
+ * 
+ * @param id - Movie ID
+ * @param lang - Language code (e.g., 'en', 'et', 'ru')
+ * @returns Normalized movie detail object
+ */
+export async function fetchMovieDetailWithFallback(id: string, lang?: string): Promise<MovieDetail> {
+  const language = mapLanguage(lang);
+  const apiKey = authParams().api_key;
+  
+  // Build params for TMDB API
+  const params = new URLSearchParams({
+    api_key: apiKey,
+    language,
+    include_image_language: `${language.split("-")[0]},en,null`,
+    include_video_language: `${language.split("-")[0]},en`,
+    append_to_response: "credits,videos,reviews,images"
+  });
+
+  // Fetch movie details with all append_to_response data
+  const { data } = await TMDB.get<TMDBMovieDetail>(`/movie/${id}?${params.toString()}`);
+
+  // If overview is empty and language isn't English, fetch English fallback
+  let finalOverview = data.overview ?? "";
+  if (!finalOverview && language !== "en-US") {
+    try {
+      const fallbackResponse = await TMDB.get(`/movie/${id}`, {
+        params: {
+          api_key: apiKey,
+          language: "en-US"
+        }
+      });
+      finalOverview = fallbackResponse.data.overview ?? "";
+    } catch (fallbackError) {
+      // Silently fail - keep empty overview
+      logger.error("Failed to fetch English fallback:", fallbackError);
+    }
+  }
+
+  // Normalize the response
+  return {
+    id: data.id,
+    title: data.title,
+    overview: finalOverview,
+    poster_path: data.poster_path ?? null,
+    backdrop_path: data.backdrop_path ?? null,
+    release_date: data.release_date ?? "",
+    runtime: data.runtime ?? 0,
+    vote_average: data.vote_average ?? 0,
+    genres: data.genres ?? [],
+    cast: (data.credits?.cast ?? []).map((c) => ({
+      id: c.id,
+      name: c.name,
+      character: c.character,
+      profile_path: c.profile_path,
+      order: c.order
+    })),
+    crew: (data.credits?.crew ?? []).map((c) => ({
+      id: c.id,
+      name: c.name,
+      job: c.job,
+      department: c.department,
+      profile_path: c.profile_path
+    })),
+    videos: (data.videos?.results ?? []).map((v) => ({
+      id: v.id,
+      key: v.key,
+      name: v.name,
+      site: v.site,
+      type: v.type,
+      official: v.official
+    })),
+    reviews: (data.reviews?.results ?? []).slice(0, MAX_REVIEWS).map((r) => ({
+      id: r.id,
+      author: r.author,
+      content: r.content,
+      created_at: r.created_at,
+      author_details: r.author_details
+    })),
+    images: {
+      backdrops: (data.images?.backdrops ?? []).slice(0, MAX_BACKDROPS).map((img) => ({
+        file_path: img.file_path,
+        width: img.width,
+        height: img.height,
+        vote_average: img.vote_average
+      })),
+      posters: (data.images?.posters ?? []).slice(0, MAX_POSTERS).map((img) => ({
+        file_path: img.file_path,
+        width: img.width,
+        height: img.height,
+        vote_average: img.vote_average
+      }))
+    }
   };
 }
