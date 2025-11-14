@@ -1,8 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Alert, Input, Pagination, Skeleton, Space, Empty, Typography } from "antd";
+import { Alert, Input, Pagination, Space, Empty, Typography } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import MovieCard from "../../components/MovieCard";
+import MovieCardSkeleton from "../../components/MovieCardSkeleton";
 import styles from "./MoviesListPage.module.scss";
 import { useDebounce } from "../../../../shared/hooks/useDebounce";
 import { useTranslation } from "react-i18next";
@@ -92,7 +93,9 @@ export default function MoviesListPage() {
       <section className={styles.grid} aria-live="polite" data-testid="movies-grid">
         {isLoading &&
           SKELETONS.map((_, i) => (
-            <div key={i} className={styles.card}><Skeleton active /></div>
+            <div key={i} className={styles.card}>
+              <MovieCardSkeleton />
+            </div>
           ))
         }
 
